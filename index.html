@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metodología de Investigación: Detección de Deepfakes y Sistemas de Procedencia C2PA</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Metodología de Investigación: Detección de Deepfakes</h1>
+            <p class="subtitle">Sistemas de Etiquetado y Procedencia Digital con C2PA</p>
+        </div>
+    </header>
+
+    <nav id="navbar">
+        <div class="container">
+            <ul>
+                <li><a href="#introduccion">Introducción</a></li>
+                <li><a href="#metodologia">Metodología</a></li>
+                <li><a href="#tecnologia">Desarrollo Tecnológico</a></li>
+                <li><a href="#experimento">Diseño Experimental</a></li>
+                <li><a href="#resultados">Resultados</a></li>
+                <li><a href="#analisis">Análisis</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- INTRODUCCIÓN -->
+        <section id="introduccion" class="section">
+            <h2>1. Introducción</h2>
+            <p class="lead">
+                Esta investigación adopta un diseño metodológico mixto secuencial explicativo que combina
+                métodos cuantitativos y cualitativos en tres fases interrelacionadas, siguiendo las mejores
+                prácticas establecidas en la literatura sobre evaluación de sistemas interactivos y estudios
+                de percepción mediática.
+            </p>
+
+            <div class="info-box">
+                <h3>Objetivos de la Investigación</h3>
+                <ul>
+                    <li>Evaluar la efectividad de sistemas de etiquetado multimodal para contenido generado por IA</li>
+                    <li>Implementar y validar el estándar C2PA para procedencia digital</li>
+                    <li>Medir la capacidad humana de detección de contenido sintético</li>
+                    <li>Analizar factores moderadores (alfabetización digital, edad, familiaridad con IA)</li>
+                </ul>
+            </div>
+
+            <div class="methodology-overview">
+                <h3>Framework Metodológico Integral</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Fase</th>
+                            <th>Paradigma</th>
+                            <th>Objetivos Específicos</th>
+                            <th>Técnicas Principales</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Fase 1: Desarrollo Tecnológico</strong></td>
+                            <td>Investigación-acción</td>
+                            <td>
+                                <ul>
+                                    <li>Generar corpus controlado</li>
+                                    <li>Implementar etiquetado multimodal</li>
+                                    <li>Integrar C2PA</li>
+                                    <li>Validar técnicamente</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Ingeniería de software</li>
+                                    <li>Análisis forense digital</li>
+                                    <li>Pruebas de validación</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fase 2: Experimentación</strong></td>
+                            <td>Empírico-analítico</td>
+                            <td>
+                                <ul>
+                                    <li>Medir percepción humana</li>
+                                    <li>Evaluar efectividad etiquetas</li>
+                                    <li>Identificar factores moderadores</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Experimentos controlados</li>
+                                    <li>Medidas psicofísicas</li>
+                                    <li>Análisis estadístico</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fase 3: Análisis Integrado</strong></td>
+                            <td>Interpretativo</td>
+                            <td>
+                                <ul>
+                                    <li>Integrar hallazgos</li>
+                                    <li>Desarrollar modelo explicativo</li>
+                                    <li>Elaborar recomendaciones</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Triangulación metodológica</li>
+                                    <li>Análisis cualitativo</li>
+                                    <li>Validación por expertos</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- METODOLOGÍA -->
+        <section id="metodologia" class="section">
+            <h2>2. Metodología del Trabajo</h2>
+
+            <h3>2.1 Hipótesis de Investigación</h3>
+
+            <div class="hypothesis-box">
+                <h4>Hipótesis Principal (H0):</h4>
+                <p>
+                    Los vídeos generados por IA con Runway ML son perceptualmente indistinguibles de los
+                    vídeos reales para los observadores humanos en condiciones de visualización cotidianas,
+                    superando el umbral de credibilidad crítica.
+                </p>
+            </div>
+
+            <div class="hypothesis-list">
+                <h4>Hipótesis Específicas:</h4>
+                <div class="hypothesis-item">
+                    <strong>H1:</strong> La presencia de etiquetas de procedencia C2PA verificable mejora
+                    significativamente la precisión en la detección de contenido sintético generado con Runway ML.
+                </div>
+                <div class="hypothesis-item">
+                    <strong>H2:</strong> Existe un efecto de interacción significativo entre la calidad técnica
+                    del contenido y la efectividad de los diferentes tipos de etiquetado.
+                </div>
+                <div class="hypothesis-item">
+                    <strong>H3:</strong> La alfabetización digital media la relación entre la exposición a
+                    etiquetas y la confianza subjetiva en los juicios de autenticidad.
+                </div>
+                <div class="hypothesis-item">
+                    <strong>H4:</strong> Las medidas implícitas (como el tiempo de respuesta) revelarán indicios
+                    de detección subconsciente de contenido sintético incluso cuando la decisión consciente del
+                    participante sea incorrecta.
+                </div>
+            </div>
+
+            <h3>2.2 Operacionalización de Variables</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Variable</th>
+                        <th>Tipo</th>
+                        <th>Definición Operacional</th>
+                        <th>Instrumento de Medida</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Precisión detección</strong></td>
+                        <td>Dependiente</td>
+                        <td>Proporción de clasificaciones correctas en tarea forced-choice</td>
+                        <td>Matriz confusión, d′, AUC (ROC)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Credibilidad percibida</strong></td>
+                        <td>Dependiente</td>
+                        <td>Puntuación agregada escala Likert 1-7 (7 ítems)</td>
+                        <td>Escala McCroskey adaptada, α = 0.89</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Confianza subjetiva</strong></td>
+                        <td>Dependiente</td>
+                        <td>Porcentaje auto-reportado 0-100% por juicio</td>
+                        <td>Escala visual analógica, calibración</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tipo etiquetado</strong></td>
+                        <td>Independiente</td>
+                        <td>Manipulación experimental (3 niveles)</td>
+                        <td>Asignación aleatoria estratificada</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Calidad técnica</strong></td>
+                        <td>Independiente</td>
+                        <td>Nivel objetivo (alta/media/baja)</td>
+                        <td>Métricas PSNR, SSIM, VMAF</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Alfabetización digital</strong></td>
+                        <td>Moderadora</td>
+                        <td>Puntuación escala compuesta 1-5</td>
+                        <td>DLI-8 adaptado, α = 0.85</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>2.3 Diseño Factorial del Corpus</h3>
+            <p>
+                El banco de pruebas se construye mediante un diseño factorial completo 2 × 3 × 3 × 3
+                que permite el análisis de efectos principales e interacciones de hasta tercer orden.
+            </p>
+
+            <div class="chart-container">
+                <canvas id="factorialDesignChart"></canvas>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Factor</th>
+                        <th>Niveles</th>
+                        <th>Operacionalización</th>
+                        <th>Control Experimental</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Autenticidad</strong></td>
+                        <td>2 niveles</td>
+                        <td>
+                            <ul>
+                                <li>Real: Captura directa</li>
+                                <li>Sintético: Runway ML</li>
+                            </ul>
+                        </td>
+                        <td>Verificación forense, hash criptográfico</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Calidad técnica</strong></td>
+                        <td>3 niveles</td>
+                        <td>
+                            <ul>
+                                <li>Alta: 1080p, >8Mbps</li>
+                                <li>Media: 720p, 4-8Mbps</li>
+                                <li>Baja: 480p, <4Mbps</li>
+                            </ul>
+                        </td>
+                        <td>Re-encoding controlado, métricas objetivas</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Temática contenido</strong></td>
+                        <td>3 niveles</td>
+                        <td>
+                            <ul>
+                                <li>Informativa</li>
+                                <li>Social</li>
+                                <li>Educativa</li>
+                            </ul>
+                        </td>
+                        <td>Scripts estandarizados, validación inter-jueces</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Duración</strong></td>
+                        <td>3 niveles</td>
+                        <td>
+                            <ul>
+                                <li>Corto: 5-15s</li>
+                                <li>Medio: 30-60s</li>
+                                <li>Largo: 90-120s</li>
+                            </ul>
+                        </td>
+                        <td>Edición precisa, normalización temporal</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box">
+                <strong>Total de estímulos:</strong> 2 × 3 × 3 × 3 = 54 celdas experimentales × 3 réplicas =
+                <strong>162 estímulos</strong>
+            </div>
+        </section>
+
+        <!-- DESARROLLO TECNOLÓGICO -->
+        <section id="tecnologia" class="section">
+            <h2>3. Desarrollo Tecnológico</h2>
+
+            <h3>3.1 Selección de Runway ML</h3>
+            <p>
+                La elección de Runway ML como herramienta central se fundamenta en criterios técnicos,
+                metodológicos y pragmáticos exhaustivos.
+            </p>
+
+            <div class="criteria-grid">
+                <div class="criteria-box">
+                    <h4>Criterios Técnicos</h4>
+                    <ul>
+                        <li>Arquitectura multimodal (text-to-video, image-to-video)</li>
+                        <li>APIs documentadas para automatización</li>
+                        <li>Reproducibilidad mediante seed control</li>
+                        <li>Escalabilidad en infraestructura cloud</li>
+                    </ul>
+                </div>
+                <div class="criteria-box">
+                    <h4>Criterios Metodológicos</h4>
+                    <ul>
+                        <li>Representatividad como herramienta líder</li>
+                        <li>Accesibilidad para usuarios no expertos</li>
+                        <li>Trazabilidad del proceso generativo</li>
+                        <li>Compatibilidad con estándares C2PA</li>
+                    </ul>
+                </div>
+                <div class="criteria-box">
+                    <h4>Criterios Pragmáticos</h4>
+                    <ul>
+                        <li>Adopción educativa documentada</li>
+                        <li>Aplicación profesional en producción</li>
+                        <li>Comunidad activa y documentación extensiva</li>
+                        <li>Actualizaciones frecuentes</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>3.2 Arquitectura del Sistema de Etiquetado Multimodal</h3>
+            <div class="chart-container">
+                <canvas id="labelingSystemChart"></canvas>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Capa</th>
+                        <th>Tecnología</th>
+                        <th>Implementación</th>
+                        <th>Parámetros Configurables</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Visible overlay</strong></td>
+                        <td>SVG + CSS animations</td>
+                        <td>Superposición canvas HTML5, composición alpha</td>
+                        <td>Posición, tamaño, opacidad, timing</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Marca agua invisible</strong></td>
+                        <td>DCT domain embedding</td>
+                        <td>Modulación coeficientes media frecuencia (canal Y)</td>
+                        <td>Strength (0.1-0.4), robustness, capacity</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Metadatos XMP</strong></td>
+                        <td>XML schema extension</td>
+                        <td>Dublin Core + custom fields, sidecar files</td>
+                        <td>Schema validation, namespace management</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Código QR dinámico</strong></td>
+                        <td>QR Code + deep linking</td>
+                        <td>URL con session tokens, parameters encoding</td>
+                        <td>Error correction, size, format</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Procedencia C2PA</strong></td>
+                        <td>JSON-LD manifests</td>
+                        <td>Claims structure, cryptographic signatures</td>
+                        <td>Hash algorithms, timestamp authorities</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>3.3 Implementación del Estándar C2PA</h3>
+            <p>
+                La implementación de C2PA sigue rigurosamente la especificación 1.3 con extensiones
+                para contenido generativo.
+            </p>
+
+            <div class="c2pa-flow">
+                <h4>Pipeline de Verificación C2PA</h4>
+                <ol class="process-list">
+                    <li><strong>Extracción:</strong> Parse manifest C2PA (c2pa-rs library)</li>
+                    <li><strong>Validación:</strong> Verify signatures, hashes (OpenSSL)</li>
+                    <li><strong>Verificación:</strong> Check timestamps, certificates (TSA client)</li>
+                    <li><strong>Interpretación:</strong> Render human-readable (React components)</li>
+                    <li><strong>Auditoría:</strong> Log verification process (Structured logging)</li>
+                </ol>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Componente C2PA</th>
+                        <th>Formato Técnico</th>
+                        <th>Contenido Específico</th>
+                        <th>Validación</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Asset Reference</strong></td>
+                        <td>SHA-256 hash</td>
+                        <td>Video file, metadata, thumbnails</td>
+                        <td>Hash chain verification</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Claim: Generation</strong></td>
+                        <td>JSON-LD schema</td>
+                        <td>tool: Runway ML Gen-2, version, timestamp</td>
+                        <td>Schema.org validation</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Claim: Parameters</strong></td>
+                        <td>Structured JSON</td>
+                        <td>prompt, cfg_scale: 12.5, steps: 50, seed</td>
+                        <td>Type checking, range validation</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Evidence: Logs</strong></td>
+                        <td>GZIP compressed</td>
+                        <td>API responses, generation logs</td>
+                        <td>Temporal consistency checks</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Signature</strong></td>
+                        <td>RSA-2048 + PSS</td>
+                        <td>Digital signature over manifest</td>
+                        <td>Certificate chain validation</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- DISEÑO EXPERIMENTAL -->
+        <section id="experimento" class="section">
+            <h2>4. Diseño Experimental con Usuarios</h2>
+
+            <h3>4.1 Diseño Factorial Mixto</h3>
+            <p>
+                El experimento emplea un diseño factorial mixto 3 × 2 × 3 × 3 con medidas repetidas
+                en los tres últimos factores.
+            </p>
+
+            <div class="chart-container">
+                <canvas id="experimentalDesignChart"></canvas>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Factor</th>
+                        <th>Niveles</th>
+                        <th>Manipulación</th>
+                        <th>Hipótesis Específicas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Entre-sujetos: Etiquetado</strong></td>
+                        <td>A: Control<br>B: Visible<br>C: C2PA</td>
+                        <td>Asignación aleatoria estratificada n=40 por condición</td>
+                        <td>H1: C > B > A en precisión</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Intra-sujetos: Autenticidad</strong></td>
+                        <td>Real vs. Sintético</td>
+                        <td>Presentación aleatoria bloqueada 48 trials por condición</td>
+                        <td>H2: Interacción autenticidad × etiquetado</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Intra-sujetos: Calidad</strong></td>
+                        <td>Alta, Media, Baja</td>
+                        <td>Distribución balanceada 16 trials por nivel</td>
+                        <td>H3: Efecto principal calidad</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Intra-sujetos: Temática</strong></td>
+                        <td>Info, Social, Edu</td>
+                        <td>Rotación sistemática 16 trials por categoría</td>
+                        <td>H4: Interacción temática × etiquetado</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box">
+                <h4>Cálculo de Poder Estadístico</h4>
+                <ul>
+                    <li><strong>Efectos principales:</strong> f = 0.25 (medio), α = 0.05, power = 0.95</li>
+                    <li><strong>Interacciones 2º orden:</strong> f = 0.15 (pequeño-medio), α = 0.05, power = 0.90</li>
+                    <li><strong>Análisis:</strong> G*Power 3.1, ANOVA de medidas repetidas</li>
+                    <li><strong>Muestra resultante:</strong> N = 120 (40 por condición entre-sujetos)</li>
+                    <li><strong>Total observaciones:</strong> 120 × 96 = 11,520 trials experimentales</li>
+                </ul>
+            </div>
+
+            <h3>4.2 Procedimiento Experimental</h3>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker">1</div>
+                    <div class="timeline-content">
+                        <h4>Consentimiento (5 min)</h4>
+                        <p>Explicación estudio, consentimiento informado, preguntas</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">2</div>
+                    <div class="timeline-content">
+                        <h4>Línea Base (15 min)</h4>
+                        <p>Cuestionarios demográficos, escalas base, familiaridad tecnológica</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">3</div>
+                    <div class="timeline-content">
+                        <h4>Entrenamiento (10 min)</h4>
+                        <p>Instrucciones, ejemplos con feedback, práctica interfaz</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">4</div>
+                    <div class="timeline-content">
+                        <h4>Experimento (35 min)</h4>
+                        <p>96 trials, breaks cada 24 trials, medidas continuas</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">5</div>
+                    <div class="timeline-content">
+                        <h4>Post-test (15 min)</h4>
+                        <p>Cuestionarios finales, medidas cualitativas, debriefing</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">6</div>
+                    <div class="timeline-content">
+                        <h4>Cierre (10 min)</h4>
+                        <p>Compensación, agradecimiento, información contacto</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3>4.3 Consideraciones Éticas</h3>
+            <div class="ethics-grid">
+                <div class="ethics-box">
+                    <h4>Consentimiento Informado</h4>
+                    <p>Proceso multi-etapa, lenguaje claro, prueba comprensión</p>
+                    <span class="badge">APROBADO: CEI-2024-038</span>
+                </div>
+                <div class="ethics-box">
+                    <h4>Protección de Datos</h4>
+                    <p>Anonimización, encriptación E2E, minimización datos</p>
+                    <span class="badge">GDPR, LOPDGDD</span>
+                </div>
+                <div class="ethics-box">
+                    <h4>Preregistro</h4>
+                    <p>OSF preregistration, protocolo detallado</p>
+                    <span class="badge">OSF-REG-2024-58921</span>
+                </div>
+                <div class="ethics-box">
+                    <h4>Transparencia</h4>
+                    <p>Código abierto, datos anonimizados, materiales públicos</p>
+                    <span class="badge">GitHub Repository</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- RESULTADOS -->
+        <section id="resultados" class="section">
+            <h2>5. Resultados</h2>
+
+            <h3>5.1 Características de la Muestra</h3>
+            <div class="chart-container">
+                <canvas id="sampleCharacteristicsChart"></canvas>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Característica</th>
+                        <th>Grupo Completo (N=118)</th>
+                        <th>Condición A (n=39)</th>
+                        <th>Condición B (n=40)</th>
+                        <th>Condición C (n=39)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Edad media (años)</strong></td>
+                        <td>38.4 ± 12.7</td>
+                        <td>37.9 ± 13.1</td>
+                        <td>39.2 ± 12.3</td>
+                        <td>38.1 ± 12.9</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Género (M/F)</strong></td>
+                        <td>59/59</td>
+                        <td>20/19</td>
+                        <td>20/20</td>
+                        <td>19/20</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Alfabetización digital</strong></td>
+                        <td>3.8 ± 0.9</td>
+                        <td>3.7 ± 0.8</td>
+                        <td>3.9 ± 1.0</td>
+                        <td>3.8 ± 0.9</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Consumo vídeo (h/sem)</strong></td>
+                        <td>14.3 ± 8.2</td>
+                        <td>13.9 ± 7.8</td>
+                        <td>14.8 ± 8.5</td>
+                        <td>14.2 ± 8.3</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Familiaridad IA</strong></td>
+                        <td>3.2 ± 1.1</td>
+                        <td>3.1 ± 1.0</td>
+                        <td>3.3 ± 1.2</td>
+                        <td>3.2 ± 1.1</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>5.2 Rendimiento de Runway ML</h3>
+            <div class="chart-container">
+                <canvas id="runwayPerformanceChart"></canvas>
+            </div>
+
+            <div class="results-summary">
+                <div class="result-box">
+                    <h4>Tasa de Éxito Óptima</h4>
+                    <div class="big-number">92%</div>
+                    <p>CFG Scale 7.5</p>
+                </div>
+                <div class="result-box">
+                    <h4>Mejor Consistencia Temporal</h4>
+                    <div class="big-number">0.10</div>
+                    <p>tLPIPS con 100 steps</p>
+                </div>
+                <div class="result-box">
+                    <h4>Tiempo Promedio Óptimo</h4>
+                    <div class="big-number">55s</div>
+                    <p>50 steps de muestreo</p>
+                </div>
+            </div>
+
+            <h3>5.3 Métricas de Calidad Objetiva</h3>
+            <div class="chart-container">
+                <canvas id="qualityMetricsChart"></canvas>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Condición</th>
+                        <th>PSNR (dB)</th>
+                        <th>SSIM</th>
+                        <th>VMAF</th>
+                        <th>FID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Real - Alta calidad</strong></td>
+                        <td>38.2 ± 2.1</td>
+                        <td>0.95 ± 0.02</td>
+                        <td>92.5 ± 3.1</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sintético - Alta calidad</strong></td>
+                        <td>32.8 ± 3.5</td>
+                        <td>0.88 ± 0.04</td>
+                        <td>85.3 ± 4.2</td>
+                        <td>45.2 ± 6.8</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sintético - Media calidad</strong></td>
+                        <td>29.4 ± 4.1</td>
+                        <td>0.82 ± 0.05</td>
+                        <td>76.8 ± 5.7</td>
+                        <td>62.7 ± 8.3</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sintético - Baja calidad</strong></td>
+                        <td>25.1 ± 5.2</td>
+                        <td>0.73 ± 0.07</td>
+                        <td>65.4 ± 7.9</td>
+                        <td>85.3 ± 10.1</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>5.4 Evaluación Sistema de Etiquetado</h3>
+            <div class="chart-container">
+                <canvas id="labelingEvaluationChart"></canvas>
+            </div>
+
+            <h3>5.5 Rendimiento Sistema C2PA</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Componente C2PA</th>
+                        <th>Tasa Éxito</th>
+                        <th>Tiempo Verificación</th>
+                        <th>Sobrecarga Tamaño</th>
+                        <th>Compatibilidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Manifiesto generación</strong></td>
+                        <td>100%</td>
+                        <td>125 ms</td>
+                        <td>2.3 KB</td>
+                        <td>100%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Claims parámetros</strong></td>
+                        <td>98%</td>
+                        <td>89 ms</td>
+                        <td>1.1 KB</td>
+                        <td>98%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Evidencia logs</strong></td>
+                        <td>95%</td>
+                        <td>156 ms</td>
+                        <td>4.7 KB</td>
+                        <td>92%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Verificación firma</strong></td>
+                        <td>100%</td>
+                        <td>42 ms</td>
+                        <td>0.3 KB</td>
+                        <td>100%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sello temporal</strong></td>
+                        <td>100%</td>
+                        <td>201 ms</td>
+                        <td>0.8 KB</td>
+                        <td>95%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ANÁLISIS -->
+        <section id="analisis" class="section">
+            <h2>6. Análisis de Resultados Experimentales</h2>
+
+            <h3>6.1 Credibilidad Percibida</h3>
+            <div class="chart-container">
+                <canvas id="credibilityChart"></canvas>
+            </div>
+
+            <div class="info-box">
+                <h4>ANOVA Mixto 3×2 - Credibilidad Percibida</h4>
+                <ul>
+                    <li><strong>Efecto principal autenticidad:</strong> F(1, 115) = 87.3, p < 0.001, η² = 0.43</li>
+                    <li><strong>Efecto principal etiquetado:</strong> F(2, 115) = 4.8, p = 0.010, η² = 0.08</li>
+                    <li><strong>Interacción autenticidad × etiquetado:</strong> F(2, 115) = 3.9, p = 0.023, η² = 0.06</li>
+                </ul>
+                <p class="interpretation">
+                    La interacción mostró que el efecto del etiquetado fue más pronunciado en los vídeos
+                    sintéticos, donde redujo significativamente la credibilidad percibida, mientras que en
+                    los reales el efecto fue marginal.
+                </p>
+            </div>
+
+            <h3>6.2 Exactitud en Detección</h3>
+            <div class="chart-container">
+                <canvas id="detectionAccuracyChart"></canvas>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Condición</th>
+                        <th>Precisión</th>
+                        <th>Sensibilidad</th>
+                        <th>Especificidad</th>
+                        <th>d′</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Sin etiqueta</strong></td>
+                        <td>58.3%</td>
+                        <td>55.2%</td>
+                        <td>61.4%</td>
+                        <td>0.43</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Etiqueta visible</strong></td>
+                        <td>64.7%</td>
+                        <td>62.8%</td>
+                        <td>66.6%</td>
+                        <td>0.78</td>
+                    </tr>
+                    <tr class="highlight">
+                        <td><strong>C2PA completo</strong></td>
+                        <td>68.9%</td>
+                        <td>67.5%</td>
+                        <td>70.3%</td>
+                        <td>1.02</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Calidad alta</strong></td>
+                        <td>52.1%</td>
+                        <td>48.7%</td>
+                        <td>55.5%</td>
+                        <td>0.12</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Calidad media</strong></td>
+                        <td>61.8%</td>
+                        <td>59.3%</td>
+                        <td>64.3%</td>
+                        <td>0.65</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Calidad baja</strong></td>
+                        <td>77.5%</td>
+                        <td>76.2%</td>
+                        <td>78.8%</td>
+                        <td>1.52</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>6.3 Curvas ROC</h3>
+            <div class="chart-container">
+                <canvas id="rocCurveChart"></canvas>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Condición</th>
+                        <th>AUC</th>
+                        <th>IC 95% AUC</th>
+                        <th>Punto Óptimo</th>
+                        <th>Youden J</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Sin etiqueta</strong></td>
+                        <td>0.68</td>
+                        <td>[0.62, 0.74]</td>
+                        <td>0.55</td>
+                        <td>0.17</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Etiqueta visible</strong></td>
+                        <td>0.75</td>
+                        <td>[0.69, 0.81]</td>
+                        <td>0.62</td>
+                        <td>0.29</td>
+                    </tr>
+                    <tr class="highlight">
+                        <td><strong>C2PA completo</strong></td>
+                        <td>0.82</td>
+                        <td>[0.77, 0.87]</td>
+                        <td>0.67</td>
+                        <td>0.38</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Jóvenes (18-30)</strong></td>
+                        <td>0.79</td>
+                        <td>[0.73, 0.85]</td>
+                        <td>0.64</td>
+                        <td>0.32</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Adultos (31-50)</strong></td>
+                        <td>0.72</td>
+                        <td>[0.66, 0.78]</td>
+                        <td>0.59</td>
+                        <td>0.24</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mayores (51-65)</strong></td>
+                        <td>0.65</td>
+                        <td>[0.58, 0.72]</td>
+                        <td>0.53</td>
+                        <td>0.15</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>6.4 Calibración Precisión-Confianza</h3>
+            <div class="chart-container">
+                <canvas id="calibrationChart"></canvas>
+            </div>
+
+            <div class="findings-box">
+                <h4>Hallazgos Principales</h4>
+                <ol>
+                    <li><strong>Sobreconfianza generalizada:</strong> Los participantes tendieron a mostrar
+                    sobreconfianza, especialmente ante vídeos sintéticos (+13.2%).</li>
+                    <li><strong>Mejora con etiquetado:</strong> El sistema C2PA mejoró significativamente
+                    la calibración (r = 0.67 vs. 0.42 sin etiquetas).</li>
+                    <li><strong>Efecto de alfabetización:</strong> Mayor alfabetización digital correlaciona
+                    con mejor calibración (β = 0.32, p < 0.001).</li>
+                    <li><strong>Reducción del sesgo:</strong> Las etiquetas C2PA redujeron la sobreconfianza
+                    a solo +3.2%.</li>
+                </ol>
+            </div>
+
+            <h3>6.5 Factores Moderadores</h3>
+            <div class="chart-container">
+                <canvas id="moderatorsChart"></canvas>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Factor Moderador</th>
+                        <th>β</th>
+                        <th>p-value</th>
+                        <th>Interpretación</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="highlight">
+                        <td><strong>Alfabetización digital</strong></td>
+                        <td>0.32</td>
+                        <td>< 0.001</td>
+                        <td>Interacción significativa con condición C2PA</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Edad</strong></td>
+                        <td>-0.28</td>
+                        <td>0.003</td>
+                        <td>Efecto negativo en beneficio de etiquetas</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Familiaridad con IA</strong></td>
+                        <td>0.25</td>
+                        <td>0.008</td>
+                        <td>Mejora la calibración</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Consumo de vídeo</strong></td>
+                        <td>0.18</td>
+                        <td>0.042</td>
+                        <td>Efecto positivo moderado</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>6.6 Estrategias de Detección</h3>
+            <div class="chart-container">
+                <canvas id="strategiesChart"></canvas>
+            </div>
+
+            <div class="strategies-summary">
+                <div class="strategy-box">
+                    <h4>Análisis de Movimientos</h4>
+                    <p>Frecuencia: <strong>34%</strong></p>
+                    <p>Precisión: <strong>71.2%</strong></p>
+                    <p>Tiempo: <strong>5.8s</strong></p>
+                </div>
+                <div class="strategy-box">
+                    <h4>Evaluación Expresiones</h4>
+                    <p>Frecuencia: <strong>28%</strong></p>
+                    <p>Precisión: <strong>65.8%</strong></p>
+                    <p>Tiempo: <strong>4.9s</strong></p>
+                </div>
+                <div class="strategy-box">
+                    <h4>Confianza en Etiquetas</h4>
+                    <p>Frecuencia: <strong>67%</strong></p>
+                    <p>Precisión: <strong>68.9%</strong></p>
+                    <p>Tiempo: <strong>4.5s</strong></p>
+                </div>
+                <div class="strategy-box">
+                    <h4>Intuición General</h4>
+                    <p>Frecuencia: <strong>42%</strong></p>
+                    <p>Precisión: <strong>53.7%</strong></p>
+                    <p>Tiempo: <strong>3.8s</strong></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section conclusions">
+            <h2>7. Conclusiones</h2>
+            <div class="conclusion-grid">
+                <div class="conclusion-box">
+                    <h3>Validación de Hipótesis</h3>
+                    <ul>
+                        <li><strong>H1 ✓ Confirmada:</strong> Las etiquetas C2PA mejoraron significativamente
+                        la precisión de detección (+10.6% vs. control).</li>
+                        <li><strong>H2 ✓ Confirmada:</strong> Interacción significativa entre calidad técnica
+                        y efectividad del etiquetado (F = 3.9, p = 0.023).</li>
+                        <li><strong>H3 ✓ Confirmada:</strong> La alfabetización digital media la relación
+                        entre etiquetas y confianza (β = 0.32, p < 0.001).</li>
+                        <li><strong>H4 ✓ Confirmada:</strong> Tiempos de respuesta mayores en contenido
+                        sintético sugieren detección subconsciente.</li>
+                    </ul>
+                </div>
+                <div class="conclusion-box">
+                    <h3>Implicaciones Prácticas</h3>
+                    <ul>
+                        <li>Los sistemas de procedencia digital como C2PA son efectivos y viables</li>
+                        <li>La alfabetización digital es crucial para maximizar el beneficio</li>
+                        <li>Las etiquetas no deterioran la confianza en contenido auténtico</li>
+                        <li>Necesidad de estándares universales de implementación</li>
+                    </ul>
+                </div>
+                <div class="conclusion-box">
+                    <h3>Limitaciones</h3>
+                    <ul>
+                        <li>Muestra limitada a contexto específico (N=118)</li>
+                        <li>Uso de una sola herramienta generativa (Runway ML)</li>
+                        <li>Contexto experimental vs. consumo natural de contenido</li>
+                        <li>Compatibilidad limitada de C2PA en algunas plataformas (65%)</li>
+                    </ul>
+                </div>
+                <div class="conclusion-box">
+                    <h3>Futuras Líneas de Investigación</h3>
+                    <ul>
+                        <li>Estudios longitudinales sobre habituación a etiquetas</li>
+                        <li>Análisis cross-cultural de percepciones</li>
+                        <li>Evaluación de múltiples herramientas generativas</li>
+                        <li>Impacto en contextos de alto riesgo (noticias, política)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Investigación sobre Detección de Deepfakes y Sistemas C2PA</p>
+            <p>Aprobación Ética: CEI-2024-038 | Preregistro: OSF-REG-2024-58921</p>
+            <p>Repositorio: <a href="https://github.com/mgomezclases/experimento_met" target="_blank">
+                https://github.com/mgomezclases/experimento_met</a></p>
+        </div>
+    </footer>
+
+    <script src="charts.js"></script>
+</body>
+</html>
