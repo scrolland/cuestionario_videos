@@ -608,31 +608,54 @@
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwz7DSw-ZmUYCAhivepGPZYK5s05sIH-AelGUQaoHWi5_KOPQ5fOueeege4KGdLLIcLzA/exec';
 
         // Configuración de videos
+        // Google Drive base URL
+        const DRIVE_BASE = 'https://drive.google.com/uc?export=view&id=';
+
         const VIDEOS_POOL = {
+            // 4 EVIDENTES (siempre se incluyen todos)
             evidentes: [
-                {path:'VIDEOS/e2/video_high_quality.mp4', quality:'alta'},
-                {path:'VIDEOS/e2/video_low_quality.mp4', quality:'baja'},
-                {path:'VIDEOS/e9/video_high_quality.mp4', quality:'alta'},
-                {path:'VIDEOS/e9/video_low_quality.mp4', quality:'baja'},
-                {path:'VIDEOS/e11/video_high_quality.mp4', quality:'alta'},
-                {path:'VIDEOS/e11/video_low_quality.mp4', quality:'baja'}
+                {path: DRIVE_BASE + '18nb50xD489N4keZ1Bo664YuTflGmlEkw', quality:'alta'},  // e2 high
+                {path: DRIVE_BASE + '1fxJtWmfJB-COXMFGZAv7aZb-BEirIzk_', quality:'baja'},  // e2 low
+                {path: DRIVE_BASE + '1jdsSAnDbYfNUQwiOLh5ptA4mVMGxCRN1', quality:'alta'},  // e9 high
+                {path: DRIVE_BASE + '1jyeqoMozRtqGrF764NDBlU2QiYBqd71R', quality:'baja'}   // e9 low
             ],
+            // Pool IA ENTRETENIMIENTO (se seleccionan 4 con mezcla alta/baja)
             ia_ent: [
-                {path:'VIDEOS/e1/video_high_quality.mp4', quality:'alta'},
-                {path:'VIDEOS/e1/video_low_quality.mp4', quality:'baja'},
-                {path:'VIDEOS/e3/video_high_quality.mp4', quality:'alta'},
-                {path:'VIDEOS/e3/video_low_quality.mp4', quality:'baja'},
-                {path:'VIDEOS/e4/video_high_quality.mp4', quality:'alta'},
-                {path:'VIDEOS/e4/video_low_quality.mp4', quality:'baja'}
+                {path: DRIVE_BASE + '1JpL5KZW7nFzW3SlFzDiszZO-8Z3uStPA', quality:'alta'},  // e1 high
+                {path: DRIVE_BASE + '1Bu2Dmt1jumKk2VIiYmhIlyJjdDAlouBV', quality:'baja'},  // e1 low
+                {path: DRIVE_BASE + '1tG6NSvT2WLCp_rjwhvXMUceEDZP_rmHA', quality:'alta'},  // e3 high
+                {path: DRIVE_BASE + '1CGSd6za-XHGrrip6V60WXOass8jv1fCy', quality:'baja'},  // e3 low
+                {path: DRIVE_BASE + '1YCSHJf6i9VtkPh3w9I-AF2nhoro_DkOU', quality:'alta'},  // e4 high
+                {path: DRIVE_BASE + '1dNxvstW5eWOZ0Dqc0igUKPQ64ByFV-8Q', quality:'baja'},  // e4 low
+                {path: DRIVE_BASE + '1mPC6LtYQWYZpDD7OecqXXLD0Y5hBaGYV', quality:'alta'},  // e5 high
+                {path: DRIVE_BASE + '1Pr1usuKFAo2Pc27j5zc8PiM5bmrzcdR-', quality:'baja'},  // e5 low
+                {path: DRIVE_BASE + '1--Pwvz3u5cQ-lXosTt785hWIMBd9PZSc', quality:'alta'}   // e6 high
             ],
+            // Pool IA INFORMATIVOS (se seleccionan 4 con mezcla alta/baja)
             ia_inf: [
-                {path:'VIDEOS/i1/video_high_quality.mp4', quality:'alta'},
-                {path:'VIDEOS/i1/video_low_quality.mp4', quality:'baja'},
-                {path:'VIDEOS/i2/video_high_quality.mp4', quality:'alta'},
-                {path:'VIDEOS/i2/video_low_quality.mp4', quality:'baja'}
+                {path: DRIVE_BASE + '1qvtNuCF_E11xiGTBnFxCrss8l5B9B4-4', quality:'alta'},  // i1 high
+                {path: DRIVE_BASE + '1Zh5y3i6B_qikACUm3wYqLMmBRr6d3bSQ', quality:'baja'},  // i1 low
+                {path: DRIVE_BASE + '1Ia-c4icg1KkLeUqmo1rg3xMLNmOSMvHP', quality:'alta'},  // i2 high
+                {path: DRIVE_BASE + '11R0DsnR87XuzUghGar_eDSYymntBwgik', quality:'baja'},  // i2 low
+                {path: DRIVE_BASE + '1M6uUylqkH000U2Rdo4UWiczwJa7rgZWy', quality:'alta'},  // i3 high
+                {path: DRIVE_BASE + '1YCSHJf6i9VtkPh3w9I-AF2nhoro_DkOU', quality:'baja'},  // i3 low
+                {path: DRIVE_BASE + '1dNxvstW5eWOZ0Dqc0igUKPQ64ByFV-8Q', quality:'alta'},  // i4 high
+                {path: DRIVE_BASE + '1mPC6LtYQWYZpDD7OecqXXLD0Y5hBaGYV', quality:'baja'}   // i4 low
             ],
-            real_ent: ['VIDEOS/reales/e1.mp4','VIDEOS/reales/e2.mp4','VIDEOS/reales/e3.mp4','VIDEOS/reales/e4.mp4'],
-            real_inf: ['VIDEOS/reales/i1.mp4','VIDEOS/reales/i2.mp4','VIDEOS/reales/i3.mp4','VIDEOS/reales/i4.mp4']
+            // REALES ENTRETENIMIENTO (se seleccionan 4)
+            real_ent: [
+                DRIVE_BASE + '1-LxXusptKl3zS41mLX9fRHr0uJvwma5m',  // e1
+                DRIVE_BASE + '1U51cb2pH_uXFJMvZBnihzL7cda9Ox6wI',  // e2
+                DRIVE_BASE + '1oQPdDsc2KmyCC3RFvuvTFgR21Ak4NA1w',  // e3
+                DRIVE_BASE + '17Juzab9snEd7gFLY5iUDPJCvk87nCZzU'   // e4
+            ],
+            // REALES INFORMATIVOS (se seleccionan 4)
+            real_inf: [
+                DRIVE_BASE + '1zHwxaPQ_ShklUSCjlkLTAGrX_1Ihyc_p',  // i1
+                DRIVE_BASE + '1oQRgR_nNXy8BPpJzFRrD54yDqNGfAACa',  // i2
+                DRIVE_BASE + '1QbOaTtneQLAjImsmXxTBuJvh63e_6L5Z',  // i3
+                DRIVE_BASE + '172RdQMYKBFNqiJ3wpyc4KHpZ47qEB-_x'   // i4
+            ]
         };
 
         function shuffleArray(array) {
@@ -646,16 +669,17 @@
 
         function selectVideosForExperiment() {
             let selected = [];
-            // 6 evidentes
+            // 4 evidentes (todos - control de atención)
             selected.push(...VIDEOS_POOL.evidentes.map(v => ({...v, tipo:'entretenimiento', es_fake:true, es_evidente:true})));
-            // 4 IA entretenimiento
+            // 4 IA entretenimiento (selección aleatoria del pool)
             selected.push(...shuffleArray(VIDEOS_POOL.ia_ent).slice(0,4).map(v => ({...v, tipo:'entretenimiento', es_fake:true, es_evidente:false})));
-            // 4 IA informativos
+            // 4 IA informativos (selección aleatoria del pool)
             selected.push(...shuffleArray(VIDEOS_POOL.ia_inf).slice(0,4).map(v => ({...v, tipo:'informativo', es_fake:true, es_evidente:false})));
             // 4 reales entretenimiento
             selected.push(...shuffleArray(VIDEOS_POOL.real_ent).slice(0,4).map(path => ({path, tipo:'entretenimiento', es_fake:false, es_evidente:false, quality:'real'})));
             // 4 reales informativos
             selected.push(...shuffleArray(VIDEOS_POOL.real_inf).slice(0,4).map(path => ({path, tipo:'informativo', es_fake:false, es_evidente:false, quality:'real'})));
+            // Total: 20 videos (4+4+4+4+4)
             return shuffleArray(selected);
         }
 
