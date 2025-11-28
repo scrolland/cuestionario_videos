@@ -445,7 +445,8 @@
             videos: [],
             responses: [],
             startTime: null,
-            videoStartTime: null
+            videoStartTime: null,
+            isSubmitting: false  // Flag para prevenir envíos múltiples
         };
 
         // Update slider value display
@@ -577,6 +578,14 @@
 
         // Finish experiment
         async function finishExperiment() {
+            // Prevenir envíos múltiples
+            if (experimentState.isSubmitting) {
+                console.log('Ya se está enviando, ignorando llamada duplicada');
+                return;
+            }
+
+            experimentState.isSubmitting = true;
+
             const data = {
                 participante_id: experimentState.participanteId,
                 genero: experimentState.genero,
@@ -608,53 +617,94 @@
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwz7DSw-ZmUYCAhivepGPZYK5s05sIH-AelGUQaoHWi5_KOPQ5fOueeege4KGdLLIcLzA/exec';
 
         // Configuración de videos
-        // Google Drive base URL
-        const DRIVE_BASE = 'https://drive.google.com/uc?export=view&id=';
+        // Helper function para crear URL de Google Drive
+        const driveUrl = (id) => `https://drive.google.com/file/d/${id}/preview`;
 
         const VIDEOS_POOL = {
-            // 4 EVIDENTES (siempre se incluyen todos)
+            // 4 EVIDENTES (siempre se incluyen todos) - e2 e i1
             evidentes: [
-                {path: DRIVE_BASE + '18nb50xD489N4keZ1Bo664YuTflGmlEkw', quality:'alta'},  // e2 high
-                {path: DRIVE_BASE + '1fxJtWmfJB-COXMFGZAv7aZb-BEirIzk_', quality:'baja'},  // e2 low
-                {path: DRIVE_BASE + '1jdsSAnDbYfNUQwiOLh5ptA4mVMGxCRN1', quality:'alta'},  // e9 high
-                {path: DRIVE_BASE + '1jyeqoMozRtqGrF764NDBlU2QiYBqd71R', quality:'baja'}   // e9 low
+                {path: driveUrl('18nb50xD489N4keZ1Bo664YuTflGmlEkw'), quality:'alta', tipo:'entretenimiento'},  // e2 high
+                {path: driveUrl('1fxJtWmfJB-COXMFGZAv7aZb-BEirIzk_'), quality:'baja', tipo:'entretenimiento'},  // e2 low
+                {path: driveUrl('1jdsSAnDbYfNUQwiOLh5ptA4mVMGxCRN1'), quality:'alta', tipo:'informativo'},  // i1 high
+                {path: driveUrl('1jyeqoMozRtqGrF764NDBlU2QiYBqd71R'), quality:'baja', tipo:'informativo'}   // i1 low
             ],
-            // Pool IA ENTRETENIMIENTO (se seleccionan 4 con mezcla alta/baja)
+            // Pool IA ENTRETENIMIENTO (22 videos - se seleccionan 4)
             ia_ent: [
-                {path: DRIVE_BASE + '1JpL5KZW7nFzW3SlFzDiszZO-8Z3uStPA', quality:'alta'},  // e1 high
-                {path: DRIVE_BASE + '1Bu2Dmt1jumKk2VIiYmhIlyJjdDAlouBV', quality:'baja'},  // e1 low
-                {path: DRIVE_BASE + '1tG6NSvT2WLCp_rjwhvXMUceEDZP_rmHA', quality:'alta'},  // e3 high
-                {path: DRIVE_BASE + '1CGSd6za-XHGrrip6V60WXOass8jv1fCy', quality:'baja'},  // e3 low
-                {path: DRIVE_BASE + '1YCSHJf6i9VtkPh3w9I-AF2nhoro_DkOU', quality:'alta'},  // e4 high
-                {path: DRIVE_BASE + '1dNxvstW5eWOZ0Dqc0igUKPQ64ByFV-8Q', quality:'baja'},  // e4 low
-                {path: DRIVE_BASE + '1mPC6LtYQWYZpDD7OecqXXLD0Y5hBaGYV', quality:'alta'},  // e5 high
-                {path: DRIVE_BASE + '1Pr1usuKFAo2Pc27j5zc8PiM5bmrzcdR-', quality:'baja'},  // e5 low
-                {path: DRIVE_BASE + '1--Pwvz3u5cQ-lXosTt785hWIMBd9PZSc', quality:'alta'}   // e6 high
+                {path: driveUrl('1JpL5KZW7nFzW3SlFzDiszZO-8Z3uStPA'), quality:'alta'},  // e1 high
+                {path: driveUrl('1Bu2Dmt1jumKk2VIiYmhIlyJjdDAlouBV'), quality:'baja'},  // e1 low
+                {path: driveUrl('1YpGP_g19xCSB9ILYJRZ_7idCYGcwm-Qm'), quality:'alta'},  // e3 high
+                {path: driveUrl('15u5BPd8p12jr2jnJ8tA4mrFpfUPd1YSU'), quality:'baja'},  // e3 low
+                {path: driveUrl('1-NBHuFY87nURVqUxLqYloe_2AbKDvIJP'), quality:'alta'},  // e4 high
+                {path: driveUrl('1v_8z-Er68gA-3HEotbY1U9G93xQao_XT'), quality:'baja'},  // e4 low
+                {path: driveUrl('1VNrToFnowZFA5xpcmfW3zJHUS4egdxrG'), quality:'alta'},  // e5 high
+                {path: driveUrl('14TrLL06TBddVTmed5dHVwnDV0uemL2Vz'), quality:'baja'},  // e5 low
+                {path: driveUrl('16Nhb_W3akypwZEdc_-pnDwWB3kKoDgUN'), quality:'alta'},  // e6 high
+                {path: driveUrl('1AhLyXnRJscFO1Z8r8aIWwR7hIjGPJiEl'), quality:'baja'},  // e6 low
+                {path: driveUrl('1L_-wImowc8RaULkqzrKi_w2_W-xoDcnE'), quality:'alta'},  // e7 high
+                {path: driveUrl('15JVODxalPDXAE0etBzXC2NWB5M7u9v4X'), quality:'baja'},  // e7 low
+                {path: driveUrl('1bJ7fBa1om4SRQhcTrTPP4lCnCvkdVymD'), quality:'alta'},  // e8 high
+                {path: driveUrl('1TW43kOUT-qq8AdWbLqtvVGGWSN3f74b2'), quality:'baja'},  // e8 low
+                {path: driveUrl('1qvtNuCF_E11xiGTBnFxCrss8l5B9B4-4'), quality:'alta'},  // e9 high
+                {path: driveUrl('1Zh5y3i6B_qikACUm3wYqLMmBRr6d3bSQ'), quality:'baja'},  // e9 low
+                {path: driveUrl('1tG6NSvT2WLCp_rjwhvXMUceEDZP_rmHA'), quality:'alta'},  // e10 high
+                {path: driveUrl('1CGSd6za-XHGrrip6V60WXOass8jv1fCy'), quality:'baja'},  // e10 low
+                {path: driveUrl('1Ia-c4icg1KkLeUqmo1rg3xMLNmOSMvHP'), quality:'alta'},  // e11 high
+                {path: driveUrl('11R0DsnR87XuzUghGar_eDSYymntBwgik'), quality:'baja'},  // e11 low
+                {path: driveUrl('1M6uUylqkH000U2Rdo4UWiczwJa7rgZWy'), quality:'alta'},  // e12 high
+                {path: driveUrl('1YCSHJf6i9VtkPh3w9I-AF2nhoro_DkOU'), quality:'baja'}   // e12 low
             ],
-            // Pool IA INFORMATIVOS (se seleccionan 4 con mezcla alta/baja)
+            // Pool IA INFORMATIVOS (20 videos - se seleccionan 4)
             ia_inf: [
-                {path: DRIVE_BASE + '1qvtNuCF_E11xiGTBnFxCrss8l5B9B4-4', quality:'alta'},  // i1 high
-                {path: DRIVE_BASE + '1Zh5y3i6B_qikACUm3wYqLMmBRr6d3bSQ', quality:'baja'},  // i1 low
-                {path: DRIVE_BASE + '1Ia-c4icg1KkLeUqmo1rg3xMLNmOSMvHP', quality:'alta'},  // i2 high
-                {path: DRIVE_BASE + '11R0DsnR87XuzUghGar_eDSYymntBwgik', quality:'baja'},  // i2 low
-                {path: DRIVE_BASE + '1M6uUylqkH000U2Rdo4UWiczwJa7rgZWy', quality:'alta'},  // i3 high
-                {path: DRIVE_BASE + '1YCSHJf6i9VtkPh3w9I-AF2nhoro_DkOU', quality:'baja'},  // i3 low
-                {path: DRIVE_BASE + '1dNxvstW5eWOZ0Dqc0igUKPQ64ByFV-8Q', quality:'alta'},  // i4 high
-                {path: DRIVE_BASE + '1mPC6LtYQWYZpDD7OecqXXLD0Y5hBaGYV', quality:'baja'}   // i4 low
+                {path: driveUrl('14wYN6VH_oc2z5OHj4yvw_wIZfcyo6R2l'), quality:'alta'},  // i2 high
+                {path: driveUrl('1QAgqx3oNhBb_9rqhCJvPMDIiF8zpxu08'), quality:'baja'},  // i2 low
+                {path: driveUrl('1dNxvstW5eWOZ0Dqc0igUKPQ64ByFV-8Q'), quality:'alta'},  // i3 high
+                {path: driveUrl('1mPC6LtYQWYZpDD7OecqXXLD0Y5hBaGYV'), quality:'baja'},  // i3 low
+                {path: driveUrl('1Pr1usuKFAo2Pc27j5zc8PiM5bmrzcdR-'), quality:'alta'},  // i4 high
+                {path: driveUrl('1--Pwvz3u5cQ-lXosTt785hWIMBd9PZSc'), quality:'baja'},  // i4 low
+                {path: driveUrl('1FOLHKBd5BnHBPCw060t6ikmpJY_8o_qY'), quality:'alta'},  // i5 high
+                {path: driveUrl('1mdp2BraNWSiETFJ6l_9EoPP175TAwkvh'), quality:'baja'},  // i5 low
+                {path: driveUrl('1COrk6-S17AqR1B6S5yZ1_LvJU_FExc9v'), quality:'alta'},  // i6 high
+                {path: driveUrl('1xzgNwsPbcA0mg8fV9ModYhBwdFOOeNKk'), quality:'baja'},  // i6 low
+                {path: driveUrl('1Fzq2qkRJSE6s1rY3p12JieOHWDAaut9g'), quality:'alta'},  // i7 high
+                {path: driveUrl('1WdIu5RD5VsTAw60w1Iuu3WVcW-NHlBf4'), quality:'baja'},  // i7 low
+                {path: driveUrl('1amfEE1YPUSXSB56Zc1atdmC8WW4qrKnM'), quality:'alta'},  // i8 high
+                {path: driveUrl('1MT4Y5rih9Fd65XxJxAbAZmVL2YkfbmVI'), quality:'baja'},  // i8 low
+                {path: driveUrl('1EjkRDlVzElJGXerAv2yDOiZ96YtJv29O'), quality:'alta'},  // i9 high
+                {path: driveUrl('1g0gbjLLCm2-_7U5OORaTY8A4m4Rkg4cX'), quality:'baja'},  // i9 low
+                {path: driveUrl('1U2p9uvRByUvdiLRUNKWhwT5xTjtCHBj_'), quality:'alta'},  // i10 high
+                {path: driveUrl('1Y3x36LyRzhVYalWo_lqzgbrDhmnGuiZe'), quality:'baja'},  // i10 low
+                {path: driveUrl('1BtrQNR0Vq3y3PeL3k8akYnj2SQOwKKvV'), quality:'alta'},  // i11 high
+                {path: driveUrl('1CPxmEyRSQs0MiaERtVqKgZQTvoW7eTOm'), quality:'baja'}   // i11 low
             ],
-            // REALES ENTRETENIMIENTO (se seleccionan 4)
+            // REALES ENTRETENIMIENTO (12 videos - se seleccionan 4)
             real_ent: [
-                DRIVE_BASE + '1-LxXusptKl3zS41mLX9fRHr0uJvwma5m',  // e1
-                DRIVE_BASE + '1U51cb2pH_uXFJMvZBnihzL7cda9Ox6wI',  // e2
-                DRIVE_BASE + '1oQPdDsc2KmyCC3RFvuvTFgR21Ak4NA1w',  // e3
-                DRIVE_BASE + '17Juzab9snEd7gFLY5iUDPJCvk87nCZzU'   // e4
+                driveUrl('1-LxXusptKl3zS41mLX9fRHr0uJvwma5m'),  // e1
+                driveUrl('1U51cb2pH_uXFJMvZBnihzL7cda9Ox6wI'),  // e2
+                driveUrl('1oQPdDsc2KmyCC3RFvuvTFgR21Ak4NA1w'),  // e3
+                driveUrl('17Juzab9snEd7gFLY5iUDPJCvk87nCZzU'),  // e4
+                driveUrl('1zHwxaPQ_ShklUSCjlkLTAGrX_1Ihyc_p'),  // e5
+                driveUrl('1oQRgR_nNXy8BPpJzFRrD54yDqNGfAACa'),  // e6
+                driveUrl('1QbOaTtneQLAjImsmXxTBuJvh63e_6L5Z'),  // e7
+                driveUrl('172RdQMYKBFNqiJ3wpyc4KHpZ47qEB-_x'),  // e8
+                driveUrl('1yHaqbFHnaigdtdRUwUcoQUbl-gp8O-UQ'),  // e9
+                driveUrl('1dJVGhVUZsCkV5oujZ-YJo87x9eMjzSaf'),  // e10
+                driveUrl('1vAKWq56B0zQS3XxRHpoqty4lccoHWu-S'),  // e11
+                driveUrl('1oYnyPfvlRXwIhj74qbvANrx5A-5ueIom')   // e12
             ],
-            // REALES INFORMATIVOS (se seleccionan 4)
+            // REALES INFORMATIVOS (12 videos - se seleccionan 4)
             real_inf: [
-                DRIVE_BASE + '1zHwxaPQ_ShklUSCjlkLTAGrX_1Ihyc_p',  // i1
-                DRIVE_BASE + '1oQRgR_nNXy8BPpJzFRrD54yDqNGfAACa',  // i2
-                DRIVE_BASE + '1QbOaTtneQLAjImsmXxTBuJvh63e_6L5Z',  // i3
-                DRIVE_BASE + '172RdQMYKBFNqiJ3wpyc4KHpZ47qEB-_x'   // i4
+                driveUrl('12lCjfpHe4kVj38afME1wZPEGfiY4WNgH'),  // i1
+                driveUrl('15VxDhh296yCqHJvagDBv1vaIzHM7YEv0'),  // i2
+                driveUrl('1PQSEe6mhru1Os5yN_it3gglwBk0NW7LS'),  // i3
+                driveUrl('1n9dKUp9v7YR8p7eIb4c1IDKTilVIKZQ-'),  // i4
+                driveUrl('1XC0beLyDPb9cNmR_bZUD512rIcUxjhZh'),  // i5
+                driveUrl('1u7vToxUvkiZjiszrPf5C1q-0AdKfxO_z'),  // i6
+                driveUrl('1QhQ90mXqhNNgoiSVzF8daQKJudUmqdht'),  // i7
+                driveUrl('1DWB25JVhcE3DxqjpR6nKf780-GA_X7pA'),  // i8
+                driveUrl('1DZi6Tg3GKEVVJkB2LU_vXoF3LusKN_wY'),  // i9
+                driveUrl('1dZakCH6mjPd4MNR_rS1PLSmmdEUCtUX-'),  // i10
+                driveUrl('1EHmp7dqHSxmrQH7P9VzNG6zulbp7sV78'),  // i11
+                driveUrl('1X6vEHHDsZDhO5IfjPthHZCtbrgex6fqC')   // i12
             ]
         };
 
@@ -669,8 +719,8 @@
 
         function selectVideosForExperiment() {
             let selected = [];
-            // 4 evidentes (todos - control de atención)
-            selected.push(...VIDEOS_POOL.evidentes.map(v => ({...v, tipo:'entretenimiento', es_fake:true, es_evidente:true})));
+            // 4 evidentes (todos - control de atención, ya tienen tipo asignado)
+            selected.push(...VIDEOS_POOL.evidentes.map(v => ({...v, es_fake:true, es_evidente:true})));
             // 4 IA entretenimiento (selección aleatoria del pool)
             selected.push(...shuffleArray(VIDEOS_POOL.ia_ent).slice(0,4).map(v => ({...v, tipo:'entretenimiento', es_fake:true, es_evidente:false})));
             // 4 IA informativos (selección aleatoria del pool)
