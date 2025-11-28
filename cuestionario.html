@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experimento: Detección de Videos Generados por IA</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .experiment-container {
+            max-width: 900px;
+            margin: 0.25rem auto;
+            padding: 0.5rem;
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0.25rem auto;
+            background-color: #000;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .video-container video {
+            width: 100%;
+            display: block;
+        }
+
+        .slider-container {
+            margin: 0.25rem 0;
+            padding: 0.5rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 4px;
+        }
+
+        .slider-container h3 {
+            text-align: center;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .label-real {
+            color: var(--success-color);
+        }
+
+        .label-fake {
+            color: var(--danger-color);
+        }
+
+        .slider-track {
+            position: relative;
+            height: 60px;
+            margin: 1rem 0;
+        }
+
+        .slider-input {
+            width: 100%;
+            height: 12px;
+            border-radius: 6px;
+            background: linear-gradient(to right,
+                #27ae60 0%, #27ae60 20%,
+                #95a5a6 50%,
+                #e74c3c 80%, #e74c3c 100%);
+            outline: none;
+            -webkit-appearance: none;
+            margin: 24px 0;
+        }
+
+        .slider-input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            border: 4px solid var(--primary-color);
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: all 0.2s ease;
+        }
+
+        .slider-input::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+        }
+
+        .slider-input::-moz-range-thumb {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            border: 4px solid var(--primary-color);
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: all 0.2s ease;
+        }
+
+        .slider-value-display {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0.25rem 0;
+            color: var(--primary-color);
+        }
+
+        .slider-markers {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            margin-top: -10px;
+        }
+
+        .marker {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .progress-info {
+            text-align: center;
+            padding: 0.4rem;
+            background-color: #e3f2fd;
+            border-radius: 4px;
+            margin-bottom: 0.25rem;
+        }
+
+        .progress-info h3 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 0.95rem;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 30px;
+            background-color: var(--bg-light);
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--success-color) 100%);
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .btn-next {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-next:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-group {
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+
+        .form-group select,
+        .form-group input[type="number"] {
+            width: 100%;
+            padding: 0.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .instructions-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .instructions-box h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .instructions-box ul {
+            margin-left: 1.5rem;
+        }
+
+        .instructions-box li {
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+
+        .thank-you-message {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .thank-you-message h2 {
+            color: var(--success-color);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .consent-box {
+            background-color: white;
+            border: 2px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .consent-box label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .consent-box input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 1rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Experimento: Detección de Videos Generados por IA</h1>
+            <p class="subtitle">Universidad - Estudio sobre percepción de contenido sintético</p>
+        </div>
+    </header>
+
+    <main class="container experiment-container">
+        <!-- PASO 1: Introducción y consentimiento -->
+        <div id="step-intro" class="step active">
+            <div class="section">
+                <h2>Bienvenido al Experimento</h2>
+
+                <div class="instructions-box">
+                    <h3>📋 Información sobre el Estudio</h3>
+                    <p><strong>Investigador Principal:</strong> scrolland@hotmail.com</p>
+                    <p><strong>Número de videos a evaluar:</strong> 20 videos</p>
+                    <p><strong>Duración estimada:</strong> 10-15 minutos</p>
+
+                    <h4>Objetivo del Estudio:</h4>
+                    <p>Este experimento busca entender cómo las personas perciben y distinguen entre videos reales y videos generados por inteligencia artificial.</p>
+
+                    <h4>¿Qué tendrás que hacer?</h4>
+                    <ul>
+                        <li><strong>Verás 20 videos</strong> cortos (cada uno dura entre 5-10 segundos)</li>
+                        <li>Para cada video, deberás <strong>evaluar si crees que es real o generado por IA</strong></li>
+                        <li>Usarás un <strong>slider</strong> (deslizador) con valores del <strong>1 al 10</strong>:
+                            <ul>
+                                <li><strong>1 = Totalmente convencido de que es REAL</strong></li>
+                                <li><strong>5 = Neutral / No estoy seguro</strong></li>
+                                <li><strong>10 = Totalmente convencido de que es FAKE (generado por IA)</strong></li>
+                            </ul>
+                        </li>
+                        <li>Si tu valoración es <strong>diferente de 1</strong>, te pediremos que indiques <strong>por qué consideras que puede ser generado por IA</strong></li>
+                        <li>No hay respuestas correctas o incorrectas, queremos tu <strong>percepción honesta</strong></li>
+                    </ul>
+
+                    <h4>Uso de los Datos:</h4>
+                    <p>Tus respuestas serán completamente <strong>anónimas</strong> y se utilizarán únicamente con fines de investigación académica. Los datos se almacenarán de forma segura y no se compartirán identificadores personales.</p>
+                </div>
+
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="consent-check" required>
+                        <span>He leído la información del estudio y acepto participar voluntariamente. Entiendo que puedo abandonar el experimento en cualquier momento.</span>
+                    </label>
+                </div>
+
+                <h3>Datos Demográficos</h3>
+                <div class="form-group">
+                    <label for="genero">Género *</label>
+                    <select id="genero" required>
+                        <option value="">Selecciona...</option>
+                        <option value="Masculino">Masculino</option>
+                        <option value="Femenino">Femenino</option>
+                        <option value="Otro">Otro</option>
+                        <option value="Prefiero no decir">Prefiero no decir</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="edad">Edad *</label>
+                    <input type="number" id="edad" min="18" max="99" required placeholder="Ej: 25">
+                </div>
+
+                <button class="btn-next" onclick="startExperiment()">Comenzar Experimento</button>
+            </div>
+        </div>
+
+        <!-- PASO 2: Videos -->
+        <div id="step-videos" class="step">
+            <div class="progress-info">
+                <h3>Video <span id="current-video">1</span> de 20</h3>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progress-bar" style="width: 5%;">5%</div>
+                </div>
+            </div>
+
+            <div class="video-container">
+                <video id="video-player" controls autoplay loop muted>
+                    <source src="" type="video/mp4">
+                    Tu navegador no soporta el elemento de video.
+                </video>
+            </div>
+
+            <div class="slider-container">
+                <h3>¿Este video es real o generado por IA?</h3>
+
+                <div class="slider-labels">
+                    <span class="label-real">😊 REAL (Seguro)</span>
+                    <span class="label-fake">🤖 FAKE/IA (Seguro)</span>
+                </div>
+
+                <div class="slider-track">
+                    <input type="range" id="slider" class="slider-input" min="1" max="10" value="5" oninput="updateSliderValue(this.value)">
+                </div>
+
+                <div class="slider-value-display" id="slider-value">5</div>
+
+                <div class="slider-markers">
+                    <span class="marker">1</span>
+                    <span class="marker">2</span>
+                    <span class="marker">3</span>
+                    <span class="marker">4</span>
+                    <span class="marker">5</span>
+                    <span class="marker">6</span>
+                    <span class="marker">7</span>
+                    <span class="marker">8</span>
+                    <span class="marker">9</span>
+                    <span class="marker">10</span>
+                </div>
+
+                <p style="text-align: center; color: var(--text-light); margin-top: 1rem;">
+                    <small>1 = Completamente real | 5 = No estoy seguro | 10 = Completamente fake/IA</small>
+                </p>
+            </div>
+
+            <!-- Desplegable de causas (oculto solo si slider = 1) -->
+            <div id="causas-container" class="slider-container" style="display: block;">
+                <h3>¿Por qué consideras que puede ser generado por IA?</h3>
+                <div class="form-group">
+                    <label for="causa-fake">Selecciona la principal razón:</label>
+                    <select id="causa-fake" style="width: 100%; padding: 0.5rem; border: 2px solid var(--border-color); border-radius: 4px; font-size: 0.9rem;">
+                        <option value="">Selecciona una opción...</option>
+                        <option value="parpadeo_antinatural">Parpadeo antinatural</option>
+                        <option value="gestos_extranos">Gestos extraños</option>
+                        <option value="movimientos_poco_fluidos">Movimientos corporales poco fluidos</option>
+                        <option value="texturas_suaves">Texturas de piel demasiado suaves</option>
+                        <option value="piel_pixelada">Piel pixelada</option>
+                        <option value="bordes_difusos">Bordes difusos alrededor de la cara</option>
+                        <option value="distorsiones_faciales">Distorsiones faciales</option>
+                        <option value="reflejos_inconsistentes">Reflejos inconsistentes</option>
+                        <option value="sombras_inconsistentes">Sombras inconsistentes</option>
+                        <option value="iluminacion_inconsistente">Iluminación inconsistente</option>
+                        <option value="diferencias_balance_color">Diferencias en el balance de color general</option>
+                        <option value="fondos_borrosos">Fondos borrosos</option>
+                        <option value="letras_ilegibles">Letras ilegibles</option>
+                        <option value="otra">Otra razón</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="btn-next" onclick="nextVideo()">Siguiente Video →</button>
+        </div>
+
+        <!-- PASO 3: Finalización -->
+        <div id="step-thanks" class="step">
+            <div class="section thank-you-message">
+                <h2>¡Gracias por tu participación!</h2>
+                <p style="font-size: 1.2rem; margin: 2rem 0;">
+                    Has completado exitosamente el experimento. Tus respuestas han sido guardadas y serán de gran ayuda para nuestra investigación.
+                </p>
+
+                <div class="info-box">
+                    <h3>Información Adicional</h3>
+                    <p>Los videos que has visto incluían tanto grabaciones reales como videos generados por inteligencia artificial usando tecnología de generación de video.</p>
+                    <p><strong>Objetivo:</strong> Comprender cómo las personas detectan contenido sintético y qué factores influyen en esta capacidad.</p>
+                </div>
+
+                <p style="margin-top: 2rem;">
+                    Si tienes preguntas sobre el estudio, puedes contactar al investigador principal en: <strong>scrolland@hotmail.com</strong>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // State management
+        let experimentState = {
+            participanteId: null,
+            currentVideo: 0,
+            videos: [],
+            responses: [],
+            startTime: null,
+            videoStartTime: null
+        };
+
+        // Update slider value display
+        function updateSliderValue(value) {
+            document.getElementById('slider-value').textContent = value;
+
+            // Change color based on value
+            const display = document.getElementById('slider-value');
+            if (value <= 3) {
+                display.style.color = '#27ae60'; // Green for real
+            } else if (value <= 7) {
+                display.style.color = '#95a5a6'; // Gray for unsure
+            } else {
+                display.style.color = '#e74c3c'; // Red for fake
+            }
+
+            // Show/hide causas dropdown: mostrar siempre excepto cuando slider=1
+            const causasContainer = document.getElementById('causas-container');
+            if (parseInt(value) === 1) {
+                causasContainer.style.display = 'none';
+                // Reset selection
+                document.getElementById('causa-fake').value = '';
+            } else {
+                causasContainer.style.display = 'block';
+            }
+        }
+
+        // Start experiment
+        async function startExperiment() {
+            // Validate inputs
+            const consent = document.getElementById('consent-check').checked;
+            const genero = document.getElementById('genero').value;
+            const edad = document.getElementById('edad').value;
+
+            if (!consent) {
+                alert('Debes aceptar el consentimiento informado para continuar.');
+                return;
+            }
+
+            if (!genero || !edad) {
+                alert('Por favor completa todos los campos demográficos.');
+                return;
+            }
+
+            if (edad < 18) {
+                alert('Debes ser mayor de 18 años para participar en este experimento.');
+                return;
+            }
+
+            // Initialize experiment
+            try {
+                const response = await fetch('init-experiment.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ genero, edad: parseInt(edad) })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    experimentState.participanteId = data.participanteId;
+                    experimentState.videos = data.videos;
+                    experimentState.startTime = Date.now();
+
+                    // Show videos step
+                    document.getElementById('step-intro').classList.remove('active');
+                    document.getElementById('step-videos').classList.add('active');
+
+                    // Load first video
+                    loadVideo(0);
+                } else {
+                    alert('Error al iniciar el experimento: ' + data.message);
+                }
+            } catch (error) {
+                alert('Error de conexión. Por favor verifica que el servidor esté funcionando.');
+                console.error(error);
+            }
+        }
+
+        // Load video
+        function loadVideo(index) {
+            if (index >= experimentState.videos.length) {
+                finishExperiment();
+                return;
+            }
+
+            experimentState.currentVideo = index;
+            experimentState.videoStartTime = Date.now();
+
+            const video = experimentState.videos[index];
+            const videoPlayer = document.getElementById('video-player');
+            videoPlayer.src = video.path;
+            videoPlayer.load();
+
+            // Reset slider
+            document.getElementById('slider').value = 5;
+            updateSliderValue(5);
+
+            // Reset causa dropdown (visible porque slider empieza en 5)
+            document.getElementById('causa-fake').value = '';
+            document.getElementById('causas-container').style.display = 'block';
+
+            // Update progress
+            const progress = ((index + 1) / experimentState.videos.length) * 100;
+            document.getElementById('current-video').textContent = index + 1;
+            document.getElementById('progress-bar').style.width = progress + '%';
+            document.getElementById('progress-bar').textContent = Math.round(progress) + '%';
+        }
+
+        // Next video
+        async function nextVideo() {
+            const sliderValue = parseInt(document.getElementById('slider').value);
+            const causaFake = document.getElementById('causa-fake').value;
+            const timeSpent = Math.round((Date.now() - experimentState.videoStartTime) / 1000);
+
+            // Validar que si slider > 1, debe seleccionar causa
+            if (sliderValue > 1 && !causaFake) {
+                alert('Por favor, selecciona la razón por la que consideras que el video puede ser generado por IA.');
+                return;
+            }
+
+            const currentVideo = experimentState.videos[experimentState.currentVideo];
+            const now = new Date();
+
+            // Save response with all fields
+            const response = {
+                fecha_hora: now.toISOString(),
+                numero_video: experimentState.currentVideo + 1,
+                video_path: currentVideo.path,
+                tipo_contenido: currentVideo.tipo_contenido,
+                es_fake: currentVideo.es_fake,
+                es_evidente: currentVideo.es_evidente || false,
+                calidad: currentVideo.calidad,
+                respuesta_slider: sliderValue,
+                causa_fake: sliderValue > 1 ? causaFake : '',
+                tiempo_respuesta_segundos: timeSpent
+            };
+
+            experimentState.responses.push(response);
+
+            // Save to server
+            try {
+                await fetch('save-response.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        participante_id: experimentState.participanteId,
+                        ...response
+                    })
+                });
+            } catch (error) {
+                console.error('Error saving response:', error);
+            }
+
+            // Load next video or finish
+            loadVideo(experimentState.currentVideo + 1);
+        }
+
+        // Finish experiment
+        async function finishExperiment() {
+            try {
+                await fetch('finish-experiment.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        participante_id: experimentState.participanteId
+                    })
+                });
+            } catch (error) {
+                console.error('Error finishing experiment:', error);
+            }
+
+            // Show thank you step
+            document.getElementById('step-videos').classList.remove('active');
+            document.getElementById('step-thanks').classList.add('active');
+        }
+    </script>
+</body>
+</html>

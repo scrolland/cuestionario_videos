@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Videos Local - Runway ML Gen-4 Turbo</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .generator-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .btn-select-folder {
+            width: 100%;
+            padding: 1.25rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .btn-select-folder:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
+        }
+
+        .folder-info {
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .folder-info.visible {
+            display: block;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .image-preview.visible {
+            display: block;
+        }
+
+        .btn-generate {
+            width: 100%;
+            padding: 1.25rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-generate:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status-panel {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .status-panel.visible {
+            display: block;
+        }
+
+        .status-panel.loading {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+        }
+
+        .status-panel.success {
+            background-color: #d4edda;
+            border-left: 5px solid var(--success-color);
+        }
+
+        .status-panel.error {
+            background-color: #f8d7da;
+            border-left: 5px solid var(--danger-color);
+        }
+
+        .video-preview {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .video-preview video {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .info-box {
+            padding: 1rem;
+            background-color: #e3f2fd;
+            border-left: 4px solid var(--primary-color);
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Generador de Videos Local - Runway Gen-4 Turbo</h1>
+            <p class="subtitle">Genera videos de 9-10 segundos a partir de imágenes locales</p>
+        </div>
+    </header>
+
+    <nav id="navbar">
+        <div class="container">
+            <ul>
+                <li><a href="index.html">Investigación Principal</a></li>
+                <li><a href="generador-local.html">Generador Local</a></li>
+                <li><a href="cuestionario.html">Cuestionario</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container generator-container">
+        <div class="section">
+            <h2>Configuración de Generación</h2>
+
+            <div class="info-box">
+                <h4>ℹ️ Cómo funciona:</h4>
+                <ol style="margin: 0.5rem 0 0 1.5rem;">
+                    <li>Selecciona una carpeta que contenga una imagen (JPG, PNG, etc.)</li>
+                    <li>El sistema detectará automáticamente la primera imagen en la carpeta</li>
+                    <li>Se generarán 2 videos (9-10 seg) basados en esa imagen usando Gen-4 Turbo:
+                        <ul>
+                            <li><strong>Alta Calidad:</strong> ~8-10 MB</li>
+                            <li><strong>Baja Calidad:</strong> ~2-3 MB</li>
+                        </ul>
+                    </li>
+                    <li>Los videos se guardarán en la misma carpeta seleccionada</li>
+                </ol>
+            </div>
+
+            <form id="generation-form">
+                <div class="form-group">
+                    <label>Paso 1: Seleccionar Carpeta con Imagen</label>
+                    <input type="file" id="folder-input" webkitdirectory directory style="display: none;">
+                    <button type="button" class="btn-select-folder" onclick="document.getElementById('folder-input').click()">
+                        📁 Seleccionar Carpeta
+                    </button>
+
+                    <div class="folder-info" id="folder-info">
+                        <p><strong>Carpeta:</strong> <span id="folder-path"></span></p>
+                        <p><strong>Imagen encontrada:</strong> <span id="image-name"></span></p>
+                        <img id="image-preview" class="image-preview" alt="Preview">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="prompt-text">Paso 2: Descripción del Movimiento (Opcional)</label>
+                    <textarea id="prompt-text" rows="3"
+                        placeholder="Describe el movimiento o acción que deseas ver en el video. Ej: 'la persona sonríe y mueve la cabeza suavemente', 'zoom lento hacia adelante', etc. Si se deja vacío, se generará movimiento natural automático."
+                        style="width: 100%; padding: 0.75rem; border: 2px solid #ddd; border-radius: 8px; font-family: inherit;"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Paso 3: Generar Videos</label>
+                    <div class="info-box" style="margin-bottom: 1rem;">
+                        <p style="margin: 0; font-weight: 600;">✨ Se generarán automáticamente 2 versiones:</p>
+                        <ul style="margin: 0.5rem 0 0 1.5rem;">
+                            <li><strong>Alta Calidad:</strong> video_high_quality.mp4 (~8-10 MB)</li>
+                            <li><strong>Baja Calidad:</strong> video_low_quality.mp4 (~2-3 MB)</li>
+                        </ul>
+                    </div>
+                    <button type="submit" class="btn-generate" id="btn-generate" disabled>
+                        🎬 Generar Videos con Gen-4 Turbo
+                    </button>
+                </div>
+            </form>
+
+            <div class="status-panel" id="status-panel">
+                <h3 id="status-title">Procesando...</h3>
+                <p id="status-message"></p>
+                <div id="status-details"></div>
+            </div>
+
+            <div class="video-preview" id="video-preview" style="display: none;">
+                <h3>Videos Generados</h3>
+                <div id="videos-container"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Generador de Videos Local - Runway Gen-4 Turbo</p>
+        </div>
+    </footer>
+
+    <script>
+        let selectedFolder = null;
+        let selectedImage = null;
+
+        // Handle folder selection
+        document.getElementById('folder-input').addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+
+            if (files.length === 0) {
+                alert('No se seleccionaron archivos');
+                return;
+            }
+
+            // Get folder path from first file
+            const firstFile = files[0];
+            const folderPath = firstFile.webkitRelativePath.split('/')[0];
+
+            // Find first image file
+            const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
+            const imageFile = files.find(file => {
+                const ext = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
+                return imageExtensions.includes(ext);
+            });
+
+            if (!imageFile) {
+                alert('No se encontró ninguna imagen en la carpeta seleccionada.\nFormatos soportados: JPG, PNG, GIF, BMP, WEBP');
+                return;
+            }
+
+            selectedFolder = folderPath;
+            selectedImage = imageFile;
+
+            // Show folder info
+            document.getElementById('folder-path').textContent = folderPath;
+            document.getElementById('image-name').textContent = imageFile.name;
+            document.getElementById('folder-info').classList.add('visible');
+
+            // Show image preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('image-preview');
+                preview.src = e.target.result;
+                preview.classList.add('visible');
+            };
+            reader.readAsDataURL(imageFile);
+
+            // Enable generate button
+            document.getElementById('btn-generate').disabled = false;
+        });
+
+        // Handle form submission
+        document.getElementById('generation-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!selectedImage) {
+                alert('Por favor selecciona una carpeta con una imagen primero');
+                return;
+            }
+
+            const promptText = document.getElementById('prompt-text').value.trim();
+
+            // Show loading status
+            const statusPanel = document.getElementById('status-panel');
+            statusPanel.className = 'status-panel visible loading';
+            document.getElementById('status-title').textContent = 'Generando Videos...';
+            document.getElementById('status-message').textContent = 'Subiendo imagen y generando 2 videos con Gen-4 Turbo. Esto puede tomar 2-4 minutos.';
+            document.getElementById('status-details').innerHTML = `
+                <p><strong>Carpeta:</strong> ${selectedFolder}</p>
+                <p><strong>Imagen:</strong> ${selectedImage.name}</p>
+                <p><strong>Prompt:</strong> ${promptText || '(Movimiento automático)'}</p>
+            `;
+
+            // Disable button
+            const btnGenerate = document.getElementById('btn-generate');
+            btnGenerate.disabled = true;
+            btnGenerate.textContent = '⏳ Generando...';
+
+            try {
+                // Create FormData to send image file
+                const formData = new FormData();
+                formData.append('image', selectedImage);
+                formData.append('folderPath', selectedFolder);
+                formData.append('promptText', promptText);
+
+                const response = await fetch('/generate-from-local-image', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Show success
+                    statusPanel.className = 'status-panel visible success';
+                    document.getElementById('status-title').textContent = '✅ Videos Generados Exitosamente';
+                    document.getElementById('status-message').textContent = result.message;
+                    document.getElementById('status-details').innerHTML = `
+                        <p><strong>Carpeta:</strong> ${result.folderPath}</p>
+                        <p><strong>Imagen usada:</strong> ${result.imageUsed}</p>
+                    `;
+
+                    // Show video previews
+                    const videosContainer = document.getElementById('videos-container');
+                    videosContainer.innerHTML = '';
+
+                    // Display both videos
+                    Object.keys(result.videos).forEach(quality => {
+                        const videoData = result.videos[quality];
+                        const videoDiv = document.createElement('div');
+                        videoDiv.style.marginBottom = '2rem';
+                        videoDiv.innerHTML = `
+                            <h4>Calidad ${videoData.label}</h4>
+                            <video controls style="width: 100%; border-radius: 8px; margin-bottom: 0.5rem;">
+                                <source src="${videoData.videoPath}" type="video/mp4">
+                            </video>
+                            <p><strong>Archivo:</strong> ${videoData.fileName}</p>
+                            <p><strong>Tamaño:</strong> ${videoData.fileSize}</p>
+                            <p><strong>Duración:</strong> ${videoData.duration} segundos</p>
+                            <p><strong>Task ID:</strong> ${videoData.taskId}</p>
+                        `;
+                        videosContainer.appendChild(videoDiv);
+                    });
+
+                    document.getElementById('video-preview').style.display = 'block';
+
+                } else {
+                    throw new Error(result.message || 'Error desconocido');
+                }
+
+            } catch (error) {
+                statusPanel.className = 'status-panel visible error';
+                document.getElementById('status-title').textContent = '❌ Error al Generar Videos';
+                document.getElementById('status-message').textContent = error.message;
+                document.getElementById('status-details').innerHTML = `
+                    <p>Por favor verifica:</p>
+                    <ul>
+                        <li>Que el servidor PHP esté ejecutándose</li>
+                        <li>Que la API key de Runway ML sea válida</li>
+                        <li>Que tengas conexión a internet</li>
+                        <li>Que la carpeta tenga permisos de escritura</li>
+                    </ul>
+                `;
+            } finally {
+                btnGenerate.disabled = false;
+                btnGenerate.textContent = '🎬 Generar Videos con Gen-4 Turbo';
+            }
+        });
+    </script>
+</body>
+</html>

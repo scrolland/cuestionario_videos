@@ -1,0 +1,179 @@
+================================================================================
+  SISTEMA DE CUESTIONARIO - EXPERIMENTO DETECCIÓN DEEPFAKES
+================================================================================
+
+📋 RESUMEN DEL SISTEMA
+----------------------
+- 20 videos por participante (6 evidentes + 8 entretenimiento + 8 informativos)
+- Slider de valoración 1-10
+- Desplegable de causas si slider ≥ 6
+- Almacenamiento automático en JSON
+- Exportación a Excel/CSV
+
+================================================================================
+  INSTRUCCIONES DE USO
+================================================================================
+
+1️⃣  INICIAR EL SERVIDOR
+   ----------------------
+   Opción A (Windows): Doble click en INICIAR-CUESTIONARIO.bat
+   Opción B (Manual): python server.py
+
+   El servidor estará disponible en: http://localhost:8000
+
+
+2️⃣  ACCEDER AL CUESTIONARIO
+   -------------------------
+   Abre tu navegador y ve a:
+   http://localhost:8000/cuestionario.html
+
+
+3️⃣  REALIZAR EL EXPERIMENTO
+   ------------------------
+   1. El participante lee el consentimiento informado
+   2. Completa género y edad
+   3. Click "Comenzar Experimento"
+   4. Para cada video (20 en total):
+      - Ver el video
+      - Mover slider (1=real, 10=fake)
+      - Si slider ≥ 6: Seleccionar causa
+      - Click "Siguiente Video"
+   5. Mensaje final de agradecimiento
+
+
+4️⃣  EXPORTAR RESULTADOS A EXCEL
+   -----------------------------
+   Opción A (Windows): Doble click en EXPORTAR-RESULTADOS.bat
+   Opción B (Manual): python export_to_excel.py
+
+   Se generará un archivo CSV que puedes abrir en Excel
+
+
+5️⃣  VER ESTADÍSTICAS RÁPIDAS
+   --------------------------
+   python analizar_resultados.py
+
+   Muestra resumen de:
+   - Total de participantes
+   - Demografía
+   - Valoraciones promedio
+   - Tasa de detección
+   - Causas más comunes
+   - Tiempos de respuesta
+
+================================================================================
+  DATOS RECOPILADOS
+================================================================================
+
+Por cada participante:
+✓ Género
+✓ Edad
+✓ Fecha y hora de inicio/finalización
+
+Por cada video:
+✓ Fecha y hora de respuesta
+✓ Número de video (1-20)
+✓ Tipo (entretenimiento/informativo)
+✓ Es fake o real
+✓ Es evidente (videos obviamente fake)
+✓ Calidad (alta/baja/real)
+✓ Valoración slider (1-10)
+✓ Causa fake (si slider ≥ 6)
+✓ Tiempo de respuesta en segundos
+
+================================================================================
+  ESTRUCTURA DE VIDEOS
+================================================================================
+
+VIDEOS/
+├── reales/              # Videos reales (e*.mp4 = entretenimiento, i*.mp4 = informativo)
+├── e1/, e3/, e4/...    # IA entretenimiento (video_high_quality.mp4, video_low_quality.mp4)
+├── e2/, e9/, e11/      # IA entretenimiento EVIDENTES (siempre se incluyen)
+└── i1/, i2/, i3/...    # IA informativos (video_high_quality.mp4, video_low_quality.mp4)
+
+================================================================================
+  OPCIONES DE CAUSA FAKE
+================================================================================
+
+Cuando slider ≥ 6, el participante debe seleccionar una causa:
+
+• Parpadeo antinatural
+• Gestos extraños
+• Movimientos corporales poco fluidos
+• Texturas de piel demasiado suaves
+• Piel pixelada
+• Bordes difusos alrededor de la cara
+• Distorsiones faciales
+• Reflejos inconsistentes
+• Sombras inconsistentes
+• Iluminación inconsistente
+• Movimiento labial que no coincide con el audio
+• Diferencias sutiles en la coloración de la piel
+• Diferencias en el balance de color general
+• Fondos borrosos
+• Fondos con pocos detalles
+• Falta de detalles en el fondo
+• Letras ilegibles
+• Otra razón
+
+================================================================================
+  ARCHIVOS DEL SISTEMA
+================================================================================
+
+ARCHIVOS PRINCIPALES:
+├── server.py                      # Servidor principal
+├── cuestionario.html              # Interfaz del cuestionario
+├── export_to_excel.py             # Exportar a CSV/Excel
+├── analizar_resultados.py         # Análisis estadístico
+├── INICIAR-CUESTIONARIO.bat       # Atajo para iniciar servidor (Windows)
+├── EXPORTAR-RESULTADOS.bat        # Atajo para exportar (Windows)
+└── README-CUESTIONARIO.md         # Documentación detallada
+
+CARPETAS:
+├── VIDEOS/                        # Videos del experimento
+└── experiment_data/               # Datos JSON de participantes
+
+ARCHIVOS GENERADOS:
+└── resultados_experimento_YYYYMMDD_HHMMSS.csv
+
+================================================================================
+  SOLUCIÓN DE PROBLEMAS
+================================================================================
+
+❌ "No se encuentran videos"
+   → Verifica que exista VIDEOS/ con las carpetas correctas
+   → Los archivos deben ser .mp4
+
+❌ "Error al guardar respuestas"
+   → Verifica que el servidor esté corriendo
+   → Verifica permisos de escritura en experiment_data/
+
+❌ "El servidor no inicia"
+   → Verifica que no haya otro servidor en puerto 8000
+   → Ejecuta: taskkill /F /IM python.exe
+   → Vuelve a iniciar
+
+❌ "CSV no se abre bien en Excel"
+   → Usa "Importar datos" en Excel
+   → Selecciona codificación UTF-8
+   → Delimitador: coma
+
+================================================================================
+  NOTAS IMPORTANTES
+================================================================================
+
+✓ Los datos se guardan automáticamente después de cada respuesta
+✓ El orden de los videos es aleatorio para cada participante
+✓ Los videos evidentes (e2, e9, e11) SIEMPRE se incluyen
+✓ No requiere base de datos (usa archivos JSON)
+✓ Compatible con cualquier navegador moderno
+✓ Los datos son completamente anónimos
+
+================================================================================
+  CONTACTO Y SOPORTE
+================================================================================
+
+Para más información, consulta:
+README-CUESTIONARIO.md
+
+================================================================================
