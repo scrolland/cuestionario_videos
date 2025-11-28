@@ -447,6 +447,12 @@
         document.getElementById('generation-form').addEventListener('submit', async (e) => {
             e.preventDefault();
 
+            // Verificar si está ejecutándose localmente
+            if (!window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
+                alert('⚠️ ATENCIÓN: Esta funcionalidad requiere ejecución local.\n\nPara usar el generador de videos:\n1. Descarga el código desde GitHub\n2. Ejecuta "python server.py" en tu terminal\n3. Abre http://localhost:8000/generador-local.html\n\nLa versión online solo muestra la interfaz de demostración.');
+                return;
+            }
+
             if (!selectedImage) {
                 alert('Por favor selecciona una carpeta con una imagen primero');
                 return;
@@ -567,6 +573,16 @@
 
         // Load statistics from server
         async function loadStats() {
+            // Verificar si está ejecutándose localmente
+            if (!window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
+                document.getElementById('stat-total').textContent = '--';
+                document.getElementById('stat-edad').textContent = '--';
+                document.getElementById('stat-genero').innerHTML = '<strong style="color: #e67e22;">⚠️ Requiere servidor local</strong>';
+                document.getElementById('stat-respuestas').textContent = '--';
+                alert('⚠️ Las estadísticas solo están disponibles en ejecución local.\n\nPara ver estadísticas reales:\n1. Descarga el código desde GitHub\n2. Ejecuta "python server.py"\n3. Abre http://localhost:8000/generador-local.html');
+                return;
+            }
+
             try {
                 const response = await fetch('/get-stats');
                 const data = await response.json();
@@ -601,6 +617,10 @@
 
         // Download CSV
         async function downloadCSV() {
+            if (!window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
+                alert('⚠️ La descarga de datos requiere ejecución local.\n\nEjecuta el servidor local con "python server.py" para descargar datos.');
+                return;
+            }
             try {
                 const response = await fetch('/export-csv');
                 const blob = await response.blob();
@@ -619,6 +639,10 @@
 
         // Download JSON
         async function downloadJSON() {
+            if (!window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
+                alert('⚠️ La descarga de datos requiere ejecución local.\n\nEjecuta el servidor local con "python server.py" para descargar datos.');
+                return;
+            }
             try {
                 const response = await fetch('/export-json');
                 const blob = await response.blob();
