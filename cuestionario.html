@@ -286,8 +286,7 @@
 
                 <div class="instructions-box">
                     <h3>📋 Información sobre el Estudio</h3>
-                    <p><strong>Investigador Principal:</strong> Silvia Charles Roland (scrolland@hotmail.com)</p>
-                    <p><strong>Universidad:</strong> C. M.</p>
+                    <p><strong>Investigador Principal:</strong> scrolland@hotmail.com</p>
                     <p><strong>Número de videos a evaluar:</strong> 20 videos</p>
                     <p><strong>Duración estimada:</strong> 10-15 minutos</p>
 
@@ -432,7 +431,7 @@
                 </div>
 
                 <p style="margin-top: 2rem;">
-                    Si tienes preguntas sobre el estudio, puedes contactar al investigador principal en: <strong>Silvia Charles Roland (scrolland@hotmail.com)</strong>
+                    Si tienes preguntas sobre el estudio, puedes contactar al investigador principal en: <strong>scrolland@hotmail.com</strong>
                 </p>
             </div>
         </div>
@@ -497,33 +496,18 @@
             }
 
             // Initialize experiment
-            try {
-                const response = await fetch('init-experiment.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ genero, edad: parseInt(edad) })
-                });
+            experimentState.participanteId = 'P' + Date.now();
+            experimentState.genero = genero;
+            experimentState.edad = parseInt(edad);
+            experimentState.videos = selectVideosForExperiment();
+            experimentState.startTime = Date.now();
 
-                const data = await response.json();
+            // Show videos step
+            document.getElementById('step-intro').classList.remove('active');
+            document.getElementById('step-videos').classList.add('active');
 
-                if (data.success) {
-                    experimentState.participanteId = data.participanteId;
-                    experimentState.videos = data.videos;
-                    experimentState.startTime = Date.now();
-
-                    // Show videos step
-                    document.getElementById('step-intro').classList.remove('active');
-                    document.getElementById('step-videos').classList.add('active');
-
-                    // Load first video
-                    loadVideo(0);
-                } else {
-                    alert('Error al iniciar el experimento: ' + data.message);
-                }
-            } catch (error) {
-                alert('Error de conexión. Por favor verifica que el servidor esté funcionando.');
-                console.error(error);
-            }
+            // Load first video
+            loadVideo(0);
         }
 
         // Load video
@@ -573,33 +557,19 @@
 
             // Save response with all fields
             const response = {
-                fecha_hora: now.toISOString(),
-                numero_video: experimentState.currentVideo + 1,
-                video_path: currentVideo.path,
-                tipo_contenido: currentVideo.tipo_contenido,
-                es_fake: currentVideo.es_fake,
-                es_evidente: currentVideo.es_evidente || false,
-                calidad: currentVideo.calidad,
-                respuesta_slider: sliderValue,
-                causa_fake: sliderValue > 1 ? causaFake : '',
-                tiempo_respuesta_segundos: timeSpent
+                numero: experimentState.currentVideo + 1,
+                path: currentVideo.path,
+                tipo: currentVideo.tipo,
+                fake: currentVideo.es_fake,
+                evidente: currentVideo.es_evidente || false,
+                calidad: currentVideo.quality || currentVideo.calidad || 'desconocida',
+                slider: sliderValue,
+                causa: sliderValue > 1 ? causaFake : '',
+                tiempo: Math.round(timeSpent),
+                es_placebo: currentVideo.es_evidente || false
             };
 
             experimentState.responses.push(response);
-
-            // Save to server
-            try {
-                await fetch('save-response.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        participante_id: experimentState.participanteId,
-                        ...response
-                    })
-                });
-            } catch (error) {
-                console.error('Error saving response:', error);
-            }
 
             // Load next video or finish
             loadVideo(experimentState.currentVideo + 1);
@@ -607,22 +577,88 @@
 
         // Finish experiment
         async function finishExperiment() {
-            try {
-                await fetch('finish-experiment.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        participante_id: experimentState.participanteId
-                    })
-                });
-            } catch (error) {
-                console.error('Error finishing experiment:', error);
-            }
+            const data = {
+                participante_id: experimentState.participanteId,
+                genero: experimentState.genero,
+                edad: experimentState.edad,
+                fecha_inicio: new Date(experimentState.startTime).toISOString(),
+                fecha_finalizacion: new Date().toISOString(),
+                respuestas: experimentState.responses
+            };
 
-            // Show thank you step
-            document.getElementById('step-videos').classList.remove('active');
-            document.getElementById('step-thanks').classList.add('active');
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                document.getElementById('step-videos').classList.remove('active');
+                document.getElementById('step-thanks').classList.add('active');
+
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('step-videos').classList.remove('active');
+                document.getElementById('step-thanks').classList.add('active');
+            }
         }
-    </script>
+    
+        // CONFIGURACIÓN GOOGLE SHEETS
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwz7DSw-ZmUYCAhivepGPZYK5s05sIH-AelGUQaoHWi5_KOPQ5fOueeege4KGdLLIcLzA/exec';
+
+        // Configuración de videos
+        const VIDEOS_POOL = {
+            evidentes: [
+                {path:'VIDEOS/e2/video_high_quality.mp4', quality:'alta'},
+                {path:'VIDEOS/e2/video_low_quality.mp4', quality:'baja'},
+                {path:'VIDEOS/e9/video_high_quality.mp4', quality:'alta'},
+                {path:'VIDEOS/e9/video_low_quality.mp4', quality:'baja'},
+                {path:'VIDEOS/e11/video_high_quality.mp4', quality:'alta'},
+                {path:'VIDEOS/e11/video_low_quality.mp4', quality:'baja'}
+            ],
+            ia_ent: [
+                {path:'VIDEOS/e1/video_high_quality.mp4', quality:'alta'},
+                {path:'VIDEOS/e1/video_low_quality.mp4', quality:'baja'},
+                {path:'VIDEOS/e3/video_high_quality.mp4', quality:'alta'},
+                {path:'VIDEOS/e3/video_low_quality.mp4', quality:'baja'},
+                {path:'VIDEOS/e4/video_high_quality.mp4', quality:'alta'},
+                {path:'VIDEOS/e4/video_low_quality.mp4', quality:'baja'}
+            ],
+            ia_inf: [
+                {path:'VIDEOS/i1/video_high_quality.mp4', quality:'alta'},
+                {path:'VIDEOS/i1/video_low_quality.mp4', quality:'baja'},
+                {path:'VIDEOS/i2/video_high_quality.mp4', quality:'alta'},
+                {path:'VIDEOS/i2/video_low_quality.mp4', quality:'baja'}
+            ],
+            real_ent: ['VIDEOS/reales/e1.mp4','VIDEOS/reales/e2.mp4','VIDEOS/reales/e3.mp4','VIDEOS/reales/e4.mp4'],
+            real_inf: ['VIDEOS/reales/i1.mp4','VIDEOS/reales/i2.mp4','VIDEOS/reales/i3.mp4','VIDEOS/reales/i4.mp4']
+        };
+
+        function shuffleArray(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function selectVideosForExperiment() {
+            let selected = [];
+            // 6 evidentes
+            selected.push(...VIDEOS_POOL.evidentes.map(v => ({...v, tipo:'entretenimiento', es_fake:true, es_evidente:true})));
+            // 4 IA entretenimiento
+            selected.push(...shuffleArray(VIDEOS_POOL.ia_ent).slice(0,4).map(v => ({...v, tipo:'entretenimiento', es_fake:true, es_evidente:false})));
+            // 4 IA informativos
+            selected.push(...shuffleArray(VIDEOS_POOL.ia_inf).slice(0,4).map(v => ({...v, tipo:'informativo', es_fake:true, es_evidente:false})));
+            // 4 reales entretenimiento
+            selected.push(...shuffleArray(VIDEOS_POOL.real_ent).slice(0,4).map(path => ({path, tipo:'entretenimiento', es_fake:false, es_evidente:false, quality:'real'})));
+            // 4 reales informativos
+            selected.push(...shuffleArray(VIDEOS_POOL.real_inf).slice(0,4).map(path => ({path, tipo:'informativo', es_fake:false, es_evidente:false, quality:'real'})));
+            return shuffleArray(selected);
+        }
+
+</script>
 </body>
 </html>
