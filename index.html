@@ -107,31 +107,23 @@
         <h1>Real o Fake</h1>
         <p class="subtitle">Experimento de Detección de Videos Generados por IA</p>
 
-        <div style="background: #fff3cd; border: 1px solid #ffc107; border-radius: 10px; padding: 1.5rem; margin-bottom: 2rem; color: #856404;">
-            <h3 style="margin-bottom: 0.5rem;">⚠️ Acceso Local Requerido</h3>
-            <p style="margin-bottom: 0.5rem;">Este sistema requiere ejecutar un servidor local para funcionar correctamente.</p>
-            <p style="font-size: 0.9rem;">Para usar el cuestionario o el generador, descarga el código y ejecuta: <code style="background: white; padding: 0.2rem 0.5rem; border-radius: 4px;">python server.py</code></p>
-        </div>
-
-        <div class="options" style="opacity: 0.5; pointer-events: none;">
-            <div class="option-card">
+        <div class="options">
+            <a href="cuestionario.html" class="option-card">
                 <div class="option-icon">📋</div>
                 <div class="option-title">Participar</div>
-                <div class="option-description">Completa el cuestionario y ayuda con la investigación</div>
-            </div>
+                <div class="option-description">Completa el cuestionario y ayuda con la investigación (10-15 minutos)</div>
+            </a>
 
-            <div class="option-card">
+            <div class="option-card" style="opacity: 0.5; pointer-events: none;">
                 <div class="option-icon">🎬</div>
                 <div class="option-title">Investigador</div>
-                <div class="option-description">Generar videos y ver estadísticas</div>
+                <div class="option-description">Panel de administración (requiere ejecución local)</div>
             </div>
         </div>
 
-        <div style="text-align: center; margin-top: 2rem;">
-            <a href="https://github.com/scrolland/cuestionario_videos"
-               style="display: inline-block; background: #24292e; color: white; padding: 1rem 2rem; border-radius: 8px; text-decoration: none; font-weight: bold;">
-                📥 Descargar desde GitHub
-            </a>
+        <div style="background: #e6f7ff; border-left: 4px solid #1890ff; border-radius: 4px; padding: 1rem; margin-top: 2rem;">
+            <p style="color: #0050b3; margin-bottom: 0.5rem;"><strong>ℹ️ Información para Investigadores:</strong></p>
+            <p style="color: #0050b3; font-size: 0.9rem;">El panel de generación de videos y estadísticas requiere ejecución local. Descarga el código desde GitHub y ejecuta: <code style="background: white; padding: 0.2rem 0.5rem; border-radius: 3px;">python server.py</code></p>
         </div>
 
         <div class="footer">
