@@ -25,6 +25,17 @@ RUNWAY_API_BASE = 'https://api.dev.runwayml.com/v1'
 DATA_DIR = Path('experiment_data')
 
 class RunwayHandler(http.server.SimpleHTTPRequestHandler):
+    def do_GET(self):
+        if self.path == '/get-stats':
+            self.handle_get_stats()
+        elif self.path == '/export-csv':
+            self.handle_export_csv()
+        elif self.path == '/export-json':
+            self.handle_export_json()
+        else:
+            # Default behavior for all other GET requests
+            super().do_GET()
+
     def do_POST(self):
         if self.path == '/generate-from-local-image':
             self.handle_video_generation()
@@ -774,6 +785,227 @@ class RunwayHandler(http.server.SimpleHTTPRequestHandler):
                 'success': False,
                 'message': f'Error al finalizar experimento: {str(e)}'
             }, 500)
+
+    def handle_get_stats(self):
+        """Get statistics from all experiment data"""
+        try:
+            # Ensure data directory exists
+            if not DATA_DIR.exists():
+                DATA_DIR.mkdir(parents=True)
+
+            # Get all participant files
+            json_files = list(DATA_DIR.glob('P*.json'))
+
+            if len(json_files) == 0:
+                self.send_json_response({
+                    'success': True,
+                    'stats': {
+                        'total_participantes': 0,
+                        'edad_promedio': 0,
+                        'genero': {
+                            'masculino': 0,
+                            'femenino': 0,
+                            'otro': 0,
+                            'porcentaje_masculino': 0,
+                            'porcentaje_femenino': 0,
+                            'porcentaje_otro': 0
+                        },
+                        'total_respuestas': 0
+                    }
+                })
+                return
+
+            # Collect stats
+            total_participantes = 0
+            edades = []
+            generos = {'masculino': 0, 'femenino': 0, 'otro': 0}
+            total_respuestas = 0
+
+            for json_file in json_files:
+                try:
+                    with open(json_file, 'r', encoding='utf-8') as f:
+                        data = json.load(f)
+
+                        total_participantes += 1
+
+                        # Age
+                        edad = data.get('edad')
+                        if edad and isinstance(edad, (int, float)):
+                            edades.append(edad)
+
+                        # Gender
+                        genero = data.get('genero', '').lower()
+                        if genero in generos:
+                            generos[genero] += 1
+
+                        # Responses
+                        respuestas = data.get('respuestas', [])
+                        total_respuestas += len(respuestas)
+
+                except Exception as e:
+                    print(f"Error reading {json_file}: {e}")
+                    continue
+
+            # Calculate averages and percentages
+            edad_promedio = sum(edades) / len(edades) if edades else 0
+
+            # Gender percentages
+            total_genero = sum(generos.values())
+            if total_genero > 0:
+                porcentaje_masculino = round((generos['masculino'] / total_genero) * 100, 1)
+                porcentaje_femenino = round((generos['femenino'] / total_genero) * 100, 1)
+                porcentaje_otro = round((generos['otro'] / total_genero) * 100, 1)
+            else:
+                porcentaje_masculino = porcentaje_femenino = porcentaje_otro = 0
+
+            stats = {
+                'total_participantes': total_participantes,
+                'edad_promedio': edad_promedio,
+                'genero': {
+                    'masculino': generos['masculino'],
+                    'femenino': generos['femenino'],
+                    'otro': generos['otro'],
+                    'porcentaje_masculino': porcentaje_masculino,
+                    'porcentaje_femenino': porcentaje_femenino,
+                    'porcentaje_otro': porcentaje_otro
+                },
+                'total_respuestas': total_respuestas
+            }
+
+            self.send_json_response({
+                'success': True,
+                'stats': stats
+            })
+
+        except Exception as e:
+            print(f"Error getting stats: {e}")
+            import traceback
+            traceback.print_exc()
+            self.send_json_response({
+                'success': False,
+                'message': f'Error al obtener estadísticas: {str(e)}'
+            }, 500)
+
+    def handle_export_csv(self):
+        """Export data to CSV"""
+        try:
+            import csv
+            import io
+
+            # Ensure data directory exists
+            if not DATA_DIR.exists():
+                self.send_error(404, "No data available")
+                return
+
+            # Get all participant files
+            json_files = list(DATA_DIR.glob('P*.json'))
+
+            if len(json_files) == 0:
+                self.send_error(404, "No data available")
+                return
+
+            # Create CSV in memory
+            output = io.StringIO()
+            fieldnames = [
+                'participante_id', 'genero', 'edad',
+                'fecha_hora_respuesta', 'numero_video',
+                'tipo_contenido', 'es_fake', 'es_evidente',
+                'calidad', 'respuesta_slider', 'causa_fake',
+                'tiempo_respuesta_segundos'
+            ]
+
+            writer = csv.DictWriter(output, fieldnames=fieldnames)
+            writer.writeheader()
+
+            # Process each participant
+            for json_file in json_files:
+                try:
+                    with open(json_file, 'r', encoding='utf-8') as f:
+                        data = json.load(f)
+
+                        participante_id = data.get('participante_id', json_file.stem)
+                        genero = data.get('genero', '')
+                        edad = data.get('edad', '')
+
+                        for respuesta in data.get('respuestas', []):
+                            writer.writerow({
+                                'participante_id': participante_id,
+                                'genero': genero,
+                                'edad': edad,
+                                'fecha_hora_respuesta': respuesta.get('fecha_hora', ''),
+                                'numero_video': respuesta.get('numero_video', ''),
+                                'tipo_contenido': respuesta.get('tipo_contenido', ''),
+                                'es_fake': respuesta.get('es_fake', ''),
+                                'es_evidente': respuesta.get('es_evidente', ''),
+                                'calidad': respuesta.get('calidad', ''),
+                                'respuesta_slider': respuesta.get('respuesta_slider', ''),
+                                'causa_fake': respuesta.get('causa_fake', ''),
+                                'tiempo_respuesta_segundos': respuesta.get('tiempo_respuesta_segundos', '')
+                            })
+
+                except Exception as e:
+                    print(f"Error processing {json_file}: {e}")
+                    continue
+
+            # Send CSV file
+            csv_content = output.getvalue()
+            csv_bytes = csv_content.encode('utf-8-sig')  # UTF-8 with BOM for Excel
+
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/csv; charset=utf-8')
+            self.send_header('Content-Disposition', f'attachment; filename="resultados_experimento.csv"')
+            self.send_header('Content-Length', str(len(csv_bytes)))
+            self.end_headers()
+            self.wfile.write(csv_bytes)
+
+        except Exception as e:
+            print(f"Error exporting CSV: {e}")
+            import traceback
+            traceback.print_exc()
+            self.send_error(500, f"Error exporting CSV: {str(e)}")
+
+    def handle_export_json(self):
+        """Export all data as JSON"""
+        try:
+            # Ensure data directory exists
+            if not DATA_DIR.exists():
+                self.send_error(404, "No data available")
+                return
+
+            # Get all participant files
+            json_files = list(DATA_DIR.glob('P*.json'))
+
+            if len(json_files) == 0:
+                self.send_error(404, "No data available")
+                return
+
+            # Collect all data
+            all_data = []
+            for json_file in json_files:
+                try:
+                    with open(json_file, 'r', encoding='utf-8') as f:
+                        data = json.load(f)
+                        all_data.append(data)
+                except Exception as e:
+                    print(f"Error reading {json_file}: {e}")
+                    continue
+
+            # Send JSON file
+            json_content = json.dumps(all_data, indent=2, ensure_ascii=False)
+            json_bytes = json_content.encode('utf-8')
+
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.send_header('Content-Disposition', f'attachment; filename="resultados_experimento.json"')
+            self.send_header('Content-Length', str(len(json_bytes)))
+            self.end_headers()
+            self.wfile.write(json_bytes)
+
+        except Exception as e:
+            print(f"Error exporting JSON: {e}")
+            import traceback
+            traceback.print_exc()
+            self.send_error(500, f"Error exporting JSON: {str(e)}")
 
     def send_json_response(self, data, status_code=200):
         self.send_response(status_code)

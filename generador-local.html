@@ -7,9 +7,103 @@
     <link rel="stylesheet" href="styles.css">
     <style>
         .generator-container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 2rem auto;
             padding: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-light);
+            transition: all 0.3s ease;
+        }
+
+        .tab:hover {
+            color: var(--primary-color);
+        }
+
+        .tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .stat-label {
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+
+        .download-section {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .btn-download {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--success-color) 0%, #27ae60 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0.5rem;
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.3);
         }
 
         .form-group {
@@ -158,6 +252,14 @@
     </nav>
 
     <main class="container generator-container">
+        <!-- Pestañas -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('generator')">Generador de Videos</button>
+            <button class="tab" onclick="switchTab('stats')">Estadísticas del Cuestionario</button>
+        </div>
+
+        <!-- TAB 1: Generador de Videos -->
+        <div id="tab-generator" class="tab-content active">
         <div class="section">
             <h2>Configuración de Generación</h2>
 
@@ -222,6 +324,65 @@
             <div class="video-preview" id="video-preview" style="display: none;">
                 <h3>Videos Generados</h3>
                 <div id="videos-container"></div>
+            </div>
+        </div>
+        </div>
+
+        <!-- TAB 2: Estadísticas del Cuestionario -->
+        <div id="tab-stats" class="tab-content">
+            <div class="section">
+                <h2>Estadísticas del Cuestionario "Real o Fake"</h2>
+
+                <div class="stats-grid" id="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Participantes</h3>
+                        <div class="stat-value" id="stat-total">-</div>
+                        <div class="stat-label">encuestas completadas</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Edad Promedio</h3>
+                        <div class="stat-value" id="stat-edad">-</div>
+                        <div class="stat-label">años</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Distribución de Género</h3>
+                        <div class="stat-value" style="font-size: 1.5rem;" id="stat-genero">-</div>
+                        <div class="stat-label">participantes</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Total de Respuestas</h3>
+                        <div class="stat-value" id="stat-respuestas">-</div>
+                        <div class="stat-label">videos evaluados</div>
+                    </div>
+                </div>
+
+                <div class="download-section">
+                    <h3>Descargar Datos del Experimento</h3>
+                    <p style="margin-bottom: 1.5rem;">Exporta todos los datos recopilados en formato CSV para análisis en Excel</p>
+
+                    <button class="btn-download" onclick="downloadCSV()">
+                        📊 Descargar CSV Completo
+                    </button>
+
+                    <button class="btn-download" onclick="downloadJSON()" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);">
+                        📁 Descargar JSON (Raw Data)
+                    </button>
+
+                    <p style="margin-top: 1rem; color: var(--text-light); font-size: 0.9rem;">
+                        Última actualización: <span id="last-update">-</span>
+                    </p>
+                </div>
+
+                <div class="info-box" style="margin-top: 2rem;">
+                    <h4>Análisis Detallado</h4>
+                    <p>Para un análisis estadístico más profundo, usa el script de Python:</p>
+                    <code style="background: white; padding: 0.5rem; border-radius: 4px; display: block; margin-top: 0.5rem;">
+                        python analizar_resultados.py
+                    </code>
+                </div>
             </div>
         </div>
     </main>
@@ -379,6 +540,100 @@
                 btnGenerate.textContent = '🎬 Generar Videos con Gen-4 Turbo';
             }
         });
+
+        // Tab switching function
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById('tab-' + tabName).style.display = 'block';
+
+            // Add active class to clicked tab button
+            event.target.classList.add('active');
+
+            // Load stats when switching to stats tab
+            if (tabName === 'stats') {
+                loadStats();
+            }
+        }
+
+        // Load statistics from server
+        async function loadStats() {
+            try {
+                const response = await fetch('/get-stats');
+                const data = await response.json();
+
+                if (data.success) {
+                    const stats = data.stats;
+
+                    // Update stat cards
+                    document.getElementById('stat-total').textContent = stats.total_participantes;
+                    document.getElementById('stat-edad').textContent = stats.edad_promedio.toFixed(1) + ' años';
+
+                    // Gender distribution
+                    const generoText = `
+                        Masculino: ${stats.genero.masculino} (${stats.genero.porcentaje_masculino}%)<br>
+                        Femenino: ${stats.genero.femenino} (${stats.genero.porcentaje_femenino}%)
+                        ${stats.genero.otro > 0 ? '<br>Otro: ' + stats.genero.otro + ' (' + stats.genero.porcentaje_otro + '%)' : ''}
+                    `;
+                    document.getElementById('stat-genero').innerHTML = generoText;
+                    document.getElementById('stat-respuestas').textContent = stats.total_respuestas;
+
+                } else {
+                    console.error('Error al cargar estadísticas:', data.message);
+                }
+            } catch (error) {
+                console.error('Error al cargar estadísticas:', error);
+                document.getElementById('stat-total').textContent = 'Error';
+                document.getElementById('stat-edad').textContent = 'Error';
+                document.getElementById('stat-genero').textContent = 'Error al cargar datos';
+                document.getElementById('stat-respuestas').textContent = 'Error';
+            }
+        }
+
+        // Download CSV
+        async function downloadCSV() {
+            try {
+                const response = await fetch('/export-csv');
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `resultados_experimento_${new Date().toISOString().slice(0,10)}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                a.remove();
+            } catch (error) {
+                alert('Error al descargar CSV: ' + error.message);
+            }
+        }
+
+        // Download JSON
+        async function downloadJSON() {
+            try {
+                const response = await fetch('/export-json');
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `resultados_experimento_${new Date().toISOString().slice(0,10)}.json`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                a.remove();
+            } catch (error) {
+                alert('Error al descargar JSON: ' + error.message);
+            }
+        }
     </script>
 </body>
 </html>
