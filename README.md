@@ -10,7 +10,7 @@ Experimento de investigación para evaluar la capacidad humana de distinguir ent
 - **Sistema de almacenamiento** de datos anónimos
 - **Exportación a Excel** para análisis estadístico
 
-**Investigador:** scrolland@hotmail.com
+**Investigador:** Silvia Charles Roland (scrolland@hotmail.com)
 
 ---
 
@@ -202,7 +202,7 @@ Cada carpeta debe contener:
 
 ## 📧 Contacto
 
-**Investigador:** scrolland@hotmail.com
+**Investigador:** Silvia Charles Roland (scrolland@hotmail.com)
 
 Para preguntas sobre:
 - Participación en el estudio

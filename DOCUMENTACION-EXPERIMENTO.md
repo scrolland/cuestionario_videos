@@ -31,6 +31,8 @@
 
 ### Contacto del Investigador
 
+**Nombre:** Silvia Charles Roland
+**Universidad:** C. M.
 **Email:** scrolland@hotmail.com
 
 ---
@@ -549,7 +551,7 @@ Por cada uno de los 20 videos:
 
 **Paso 3: Finalización**
 - Mensaje de agradecimiento
-- Email de contacto: scrolland@hotmail.com
+- Contacto del investigador: Silvia Charles Roland (scrolland@hotmail.com)
 
 ### 7.3. Composición de los 20 Videos
 
