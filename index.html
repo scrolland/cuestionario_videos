@@ -383,13 +383,21 @@
                         <option value="Masculino">Masculino</option>
                         <option value="Femenino">Femenino</option>
                         <option value="Otro">Otro</option>
-                        <option value="Prefiero no decir">Prefiero no decir</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="edad">Edad *</label>
                     <input type="number" id="edad" min="18" max="99" required placeholder="Ej: 25">
+                </div>
+
+                <div class="form-group">
+                    <label for="consumo-videos">Nivel de consumo habitual de videos *</label>
+                    <select id="consumo-videos" required>
+                        <option value="">Selecciona...</option>
+                        <option value="Muy poco/nada">Muy poco/nada</option>
+                        <option value="Habitualmente/Muy habitualmente">Habitualmente/Muy habitualmente</option>
+                    </select>
                 </div>
 
                 <button class="btn-next" onclick="startExperiment()">Comenzar Experimento</button>
@@ -441,28 +449,26 @@
                 </p>
             </div>
 
-            <!-- Desplegable de causas (oculto solo si slider = 1) -->
+            <!-- Causas con botones radio (oculto solo si slider = 1) -->
             <div id="causas-container" class="slider-container" style="display: block;">
-                <h3>¿Por qué consideras que puede ser generado por IA?</h3>
-                <div class="form-group">
-                    <label for="causa-fake">Selecciona la principal razón:</label>
-                    <select id="causa-fake" style="width: 100%; padding: 0.5rem; border: 2px solid var(--border-color); border-radius: 4px; font-size: 0.9rem;">
-                        <option value="">Selecciona una opción...</option>
-                        <option value="parpadeo_antinatural">Parpadeo antinatural</option>
-                        <option value="gestos_extranos">Gestos extraños</option>
-                        <option value="movimientos_poco_fluidos">Movimientos corporales poco fluidos</option>
-                        <option value="texturas_suaves">Texturas de piel demasiado suaves</option>
-                        <option value="piel_pixelada">Piel pixelada</option>
-                        <option value="bordes_difusos">Bordes difusos alrededor de la cara</option>
-                        <option value="distorsiones_faciales">Distorsiones faciales</option>
-                        <option value="reflejos_inconsistentes">Reflejos inconsistentes</option>
-                        <option value="sombras_inconsistentes">Sombras inconsistentes</option>
-                        <option value="iluminacion_inconsistente">Iluminación inconsistente</option>
-                        <option value="diferencias_balance_color">Diferencias en el balance de color general</option>
-                        <option value="fondos_borrosos">Fondos borrosos</option>
-                        <option value="letras_ilegibles">Letras ilegibles</option>
-                        <option value="otra">Otra razón</option>
-                    </select>
+                <h3 style="margin-bottom: 0.5rem;">¿Por qué consideras que puede ser generado por IA?</h3>
+                <div style="display: grid; gap: 0.5rem;">
+                    <label style="display: flex; align-items: center; padding: 0.5rem; background: #f8f9fa; border-radius: 4px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s;">
+                        <input type="radio" name="causa-fake" value="movimientos_gestos" style="margin-right: 0.5rem; width: 18px; height: 18px; cursor: pointer;">
+                        <span style="font-size: 0.9rem;">Movimientos y gestos anormales</span>
+                    </label>
+                    <label style="display: flex; align-items: center; padding: 0.5rem; background: #f8f9fa; border-radius: 4px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s;">
+                        <input type="radio" name="causa-fake" value="piel_textura" style="margin-right: 0.5rem; width: 18px; height: 18px; cursor: pointer;">
+                        <span style="font-size: 0.9rem;">Problemas de piel y textura</span>
+                    </label>
+                    <label style="display: flex; align-items: center; padding: 0.5rem; background: #f8f9fa; border-radius: 4px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s;">
+                        <input type="radio" name="causa-fake" value="iluminacion_colores" style="margin-right: 0.5rem; width: 18px; height: 18px; cursor: pointer;">
+                        <span style="font-size: 0.9rem;">Iluminación y colores inconsistentes</span>
+                    </label>
+                    <label style="display: flex; align-items: center; padding: 0.5rem; background: #f8f9fa; border-radius: 4px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s;">
+                        <input type="radio" name="causa-fake" value="otros_visuales" style="margin-right: 0.5rem; width: 18px; height: 18px; cursor: pointer;">
+                        <span style="font-size: 0.9rem;">Otros problemas visuales</span>
+                    </label>
                 </div>
             </div>
 
@@ -531,7 +537,8 @@
             if (parseInt(value) === 1) {
                 causasContainer.style.display = 'none';
                 // Reset selection
-                document.getElementById('causa-fake').value = '';
+                const radios = document.querySelectorAll('input[name="causa-fake"]');
+                radios.forEach(radio => radio.checked = false);
             } else {
                 causasContainer.style.display = 'block';
             }
@@ -543,13 +550,14 @@
             const consent = document.getElementById('consent-check').checked;
             const genero = document.getElementById('genero').value;
             const edad = document.getElementById('edad').value;
+            const consumoVideos = document.getElementById('consumo-videos').value;
 
             if (!consent) {
                 alert('Debes aceptar el consentimiento informado para continuar.');
                 return;
             }
 
-            if (!genero || !edad) {
+            if (!genero || !edad || !consumoVideos) {
                 alert('Por favor completa todos los campos demográficos.');
                 return;
             }
@@ -563,6 +571,7 @@
             experimentState.participanteId = 'P' + Date.now();
             experimentState.genero = genero;
             experimentState.edad = parseInt(edad);
+            experimentState.consumoVideos = consumoVideos;
             experimentState.videos = selectVideosForExperiment();
             experimentState.startTime = Date.now();
 
@@ -592,8 +601,9 @@
             document.getElementById('slider').value = 5;
             updateSliderValue(5);
 
-            // Reset causa dropdown (visible porque slider empieza en 5)
-            document.getElementById('causa-fake').value = '';
+            // Reset causa radio buttons (visible porque slider empieza en 5)
+            const radios = document.querySelectorAll('input[name="causa-fake"]');
+            radios.forEach(radio => radio.checked = false);
             document.getElementById('causas-container').style.display = 'block';
 
             // Update progress
@@ -606,7 +616,8 @@
         // Next video
         async function nextVideo() {
             const sliderValue = parseInt(document.getElementById('slider').value);
-            const causaFake = document.getElementById('causa-fake').value;
+            const causaFakeRadio = document.querySelector('input[name="causa-fake"]:checked');
+            const causaFake = causaFakeRadio ? causaFakeRadio.value : '';
             const timeSpent = Math.round((Date.now() - experimentState.videoStartTime) / 1000);
 
             // Validar que si slider > 1, debe seleccionar causa
@@ -652,6 +663,7 @@
                 participante_id: experimentState.participanteId,
                 genero: experimentState.genero,
                 edad: experimentState.edad,
+                consumo_videos: experimentState.consumoVideos,
                 fecha_inicio: new Date(experimentState.startTime).toISOString(),
                 fecha_finalizacion: new Date().toISOString(),
                 respuestas: experimentState.responses
