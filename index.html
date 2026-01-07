@@ -862,12 +862,12 @@
 
             // NUEVA LÓGICA DE SELECCIÓN:
             // Total: 20 videos
-            // - Al menos 2 placebos (control de atención)
-            // - 9 fakes (videos generados por IA)
-            // - 9 reales (videos reales)
+            // - 4 placebos (control de atención)
+            // - 8 fakes (videos generados por IA)
+            // - 8 reales (videos reales)
 
-            // 1. Seleccionar 2 placebos aleatorios (o todos si hay menos de 2)
-            const numPlacebos = Math.max(2, Math.min(VIDEOS_POOL.placebo.length, 2));
+            // 1. Seleccionar 4 placebos aleatorios (o todos si hay menos de 4)
+            const numPlacebos = Math.min(VIDEOS_POOL.placebo.length, 4);
             const selectedPlacebos = shuffleArray(VIDEOS_POOL.placebo).slice(0, numPlacebos);
             selected.push(...selectedPlacebos.map(path => ({
                 path,
@@ -876,8 +876,8 @@
                 es_placebo: true
             })));
 
-            // 2. Seleccionar 9 fakes aleatorios
-            const selectedFakes = shuffleArray(VIDEOS_POOL.fakes).slice(0, 9);
+            // 2. Seleccionar 8 fakes aleatorios
+            const selectedFakes = shuffleArray(VIDEOS_POOL.fakes).slice(0, 8);
             selected.push(...selectedFakes.map(path => ({
                 path,
                 tipo: 'fake',
@@ -885,8 +885,8 @@
                 es_placebo: false
             })));
 
-            // 3. Seleccionar 9 reales aleatorios
-            const selectedReales = shuffleArray(VIDEOS_POOL.reales).slice(0, 9);
+            // 3. Seleccionar 8 reales aleatorios
+            const selectedReales = shuffleArray(VIDEOS_POOL.reales).slice(0, 8);
             selected.push(...selectedReales.map(path => ({
                 path,
                 tipo: 'real',
@@ -894,7 +894,7 @@
                 es_placebo: false
             })));
 
-            // Total: 2 + 9 + 9 = 20 videos
+            // Total: 4 + 8 + 8 = 20 videos
             // Mezclar el orden final
             return shuffleArray(selected);
         }
