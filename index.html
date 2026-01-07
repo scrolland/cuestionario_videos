@@ -633,14 +633,12 @@
             const response = {
                 numero: experimentState.currentVideo + 1,
                 path: currentVideo.path,
-                tipo: currentVideo.tipo,
-                fake: currentVideo.es_fake,
-                evidente: currentVideo.es_evidente || false,
-                calidad: currentVideo.quality || currentVideo.calidad || 'desconocida',
+                tipo: currentVideo.tipo,  // 'fake', 'real', o 'placebo'
+                es_fake: currentVideo.es_fake,
+                es_placebo: currentVideo.es_placebo || false,
                 slider: sliderValue,
                 causa: sliderValue > 1 ? causaFake : '',
-                tiempo: Math.round(timeSpent),
-                es_placebo: currentVideo.es_evidente || false
+                tiempo: Math.round(timeSpent)
             };
 
             experimentState.responses.push(response);
@@ -694,91 +692,159 @@
         // Helper function para crear URL de Google Drive con autoplay
         const driveUrl = (id) => `https://drive.google.com/file/d/${id}/preview`;
 
+        // NUEVA ESTRUCTURA: 3 carpetas (fakes, reales, placebo)
+        // Carpeta: https://drive.google.com/drive/u/2/folders/1iwUNV-Z2t6GViM4FDRI0TbKpeTdACH5b
         const VIDEOS_POOL = {
-            // 4 EVIDENTES (siempre se incluyen todos) - e2 e i1
-            evidentes: [
-                {path: driveUrl('18nb50xD489N4keZ1Bo664YuTflGmlEkw'), quality:'alta', tipo:'entretenimiento'},  // e2 high
-                {path: driveUrl('1fxJtWmfJB-COXMFGZAv7aZb-BEirIzk_'), quality:'baja', tipo:'entretenimiento'},  // e2 low
-                {path: driveUrl('1jdsSAnDbYfNUQwiOLh5ptA4mVMGxCRN1'), quality:'alta', tipo:'informativo'},  // i1 high
-                {path: driveUrl('1jyeqoMozRtqGrF764NDBlU2QiYBqd71R'), quality:'baja', tipo:'informativo'}   // i1 low
+            // Videos FAKE (generados por IA) - f1 a f65
+            fakes: [
+                driveUrl('1INQbE3mIpNjr7uyQw5cSBKToYNY6fByy'),  // f1
+                driveUrl('1ofPl4YSAbx7x6BQWTnUNeFxo2YQ_9uJJ'),  // f2
+                driveUrl('1W7QmV-H_JXGv58MXpt97Kw6EI01O_qYu'),  // f3
+                driveUrl('15RYcacFvH9nNSQhKE7GrN3Rvk4U_1sNw'),  // f4
+                driveUrl('1g0N1panwombofVKw4oGu5kVR1hz8yX6h'),  // f5
+                driveUrl('1LeJAviR2U9PYoCShEmD2zcOUbY-k9irs'),  // f6
+                driveUrl('1ue6w8rJt3Ebb7Rpol0fhHB_mkwCeQADT'),  // f7
+                driveUrl('1hKurYxAW6HE0HtUaWpQNwhC0kSOVOl8h'),  // f8
+                driveUrl('1K3sZT02g24zTkpg6f3-8dIYB1OCoCyHi'),  // f9
+                driveUrl('1i6RbwGlRtSjaUEBIAbRuOaZbad9HRihC'),  // f10
+                driveUrl('1KBMqxUqwSwQkTE-FHxaR8s24-XYD2L2c'),  // f11
+                driveUrl('19jbt6vHVAJEV7gbtT7h5pdvdRLHvCwyi'),  // f12
+                driveUrl('1AfV310GbFub2ZP7Cb5qnyXxnWNe19UxT'),  // f13
+                driveUrl('1I-V_3UjdXmNWlrmykXmlUS8_e5jJx1us'),  // f14
+                driveUrl('15PEY9gJ-7Z3whM8-FLnJwJ2ihiOJhLKN'),  // f15
+                driveUrl('1qUDZwTnyA3gRszsDJ06NNWQmodtHXcPY'),  // f16
+                driveUrl('1q_VlI2f8XqDsAoXvzabNMBoalJvPWOOr'),  // f17
+                driveUrl('1b-245BmpxUv22bozPqTFjQFhn5l0Oq53'),  // f18
+                driveUrl('11vkA8cMfl_gNbXXEf8_fDLoacqdxoKc5'),  // f19
+                driveUrl('1NPdGIEt4c7nKVBo53bL5tCPhmwzUYkuY'),  // f20
+                driveUrl('1FwFNwmsnf6dw_usurfC6Am1aGsuo8xAp'),  // f21
+                driveUrl('1-hCTkHRaiIXf9VqjzVlReymLzKiW3bMz'),  // f22
+                driveUrl('1VRzCyKkkNmiwCkI69ztnnz3Vfhn6SV7a'),  // f23
+                driveUrl('1qcVVRp-15SHc8ZrRRz29tHawnK8N90UJ'),  // f24
+                driveUrl('1wDi3U_tRJ1_LSIxdA3CQbp4b44cAkojR'),  // f25
+                driveUrl('1o0vrPfA4c2e4k4ArC3hO6pwMPJEAAvYp'),  // f26
+                driveUrl('1US86_OCvEB7c8tIFkOrH0ECU7M3Dr332'),  // f27
+                driveUrl('11RBlJEPfXvTbzDH4mseA5qn51CgVCO6a'),  // f28
+                driveUrl('1mbr04BCEyc0dwIrgpaRHqeFHiJl65MDc'),  // f29
+                driveUrl('1jRuA7wYl5uWhU6K3sW-zCkPtDu2Ue1bp'),  // f30
+                driveUrl('108G9dTuJchCUjNLvA9tQGh2hm6mx8-dF'),  // f31
+                driveUrl('1p8Ehd6-Jn5X_uYS822kWi7I657q3_AJw'),  // f32
+                driveUrl('1nUftpKN3nb9wZZ88vRILwbFzFGXH4ZLT'),  // f33
+                driveUrl('1TOX_HgK7CvV40K8WjaMvSOx48R-d5dfE'),  // f34
+                driveUrl('1Xv2OaPZeWh-eJS-L21y7P8Y2YXpqYIn4'),  // f35
+                driveUrl('1UBO30GH3CnEwOj_fsx2QPIrWcrCmUl6Y'),  // f36
+                driveUrl('1ozzzJ4SpnXe5IW5pUtSBIY9_Qvwo6wFR'),  // f37
+                driveUrl('1ueyJOa2ScfpFuClTAk0azNTEzkZL7dKg'),  // f38
+                driveUrl('1GR0UcLvJayyFChD_6xZ5xTac3_dnh5oA'),  // f39
+                driveUrl('1Apcd-y4dfm7Xk6oX-I-jHL9Hx_TZBerv'),  // f40
+                driveUrl('1FYv26NyxNrf4C0WaULDUgmyPiFodHnhv'),  // f41
+                driveUrl('1wTyL4y5aFwAbAFgFKXHHwJKULPUmk20T'),  // f42
+                driveUrl('1GZfyCtR1uXs2z9W9NQDbZNq0hy-hzQCl'),  // f43
+                driveUrl('12c4X84tC4CbxjLDCLvF79OJ43qCeyD73'),  // f44
+                driveUrl('1bAM_B62qc5Gcbw-WugKvRFoiBtBnNUao'),  // f45
+                driveUrl('1sYQE7KEaFd-jZOsJoXqkEK-UabGu5ObM'),  // f46
+                driveUrl('1ecPAPgj_XESvUgvVGvVMkB2sMDx6zaLW'),  // f47
+                driveUrl('1BoRaX29uXYzT6wvymEdDdioyzO99083D'),  // f48
+                driveUrl('1nrjVGsAXBh00S32bDVuYTZCE-HrKGWDS'),  // f49
+                driveUrl('11TJZrIZRZwKct3yt4kL_3IcgsP8VmzxV'),  // f50
+                driveUrl('1d1j6qltwadblpK1G612jextgGZ_hRNWK'),  // f51
+                driveUrl('1VQfufzjN_W1CiSmTTRkTRpyouc2yUrga'),  // f52
+                driveUrl('1hsRgDc5lQQ_jp2i2Hv5Y9xGafToRGoKQ'),  // f53
+                driveUrl('1xtll6LiA_vpjmxDrDcLdhiQ29kDGiirF'),  // f54
+                driveUrl('1Tpt7DfdJdm7xoz_qnMGomX1t_kp6yOcQ'),  // f55
+                driveUrl('1pqYk95V3w4PuVyfttW7EsdDR0j0dCrr2'),  // f56
+                driveUrl('14n42ohNszIxQCfulzOu-1qIUsswSKs8P'),  // f57
+                driveUrl('1IN8O3B574DrgNyReLewFGTJ68IYCl_S7'),  // f58
+                driveUrl('18hSvQSiYacwUmVj7eDYPk1wn7j4Ni8SO'),  // f59
+                driveUrl('1Iq29dSfUoxFWlp_kgsutBocfN8gGBVg9'),  // f60
+                driveUrl('1OTORIqj3IDjl9fO50YeaEYIlrWWU-xXv'),  // f61
+                driveUrl('1NV4eJX5lQSmV-RPHhT5DlgI7wh51lPV5'),  // f62
+                driveUrl('1pPqhwF28cItrhlKzMqkmMzU6wCMZ4uYW'),  // f63
+                driveUrl('1UDvOXn7yf5O86Ogb1oj7PJ6oPpp4GU96'),  // f64
+                driveUrl('1v_NtWczzyBo4EZGqdCLxXyttf0wjz8X0')   // f65
             ],
-            // Pool IA ENTRETENIMIENTO (22 videos - se seleccionan 4)
-            ia_ent: [
-                {path: driveUrl('1JpL5KZW7nFzW3SlFzDiszZO-8Z3uStPA'), quality:'alta'},  // e1 high
-                {path: driveUrl('1Bu2Dmt1jumKk2VIiYmhIlyJjdDAlouBV'), quality:'baja'},  // e1 low
-                {path: driveUrl('1YpGP_g19xCSB9ILYJRZ_7idCYGcwm-Qm'), quality:'alta'},  // e3 high
-                {path: driveUrl('15u5BPd8p12jr2jnJ8tA4mrFpfUPd1YSU'), quality:'baja'},  // e3 low
-                {path: driveUrl('1-NBHuFY87nURVqUxLqYloe_2AbKDvIJP'), quality:'alta'},  // e4 high
-                {path: driveUrl('1v_8z-Er68gA-3HEotbY1U9G93xQao_XT'), quality:'baja'},  // e4 low
-                {path: driveUrl('1VNrToFnowZFA5xpcmfW3zJHUS4egdxrG'), quality:'alta'},  // e5 high
-                {path: driveUrl('14TrLL06TBddVTmed5dHVwnDV0uemL2Vz'), quality:'baja'},  // e5 low
-                {path: driveUrl('16Nhb_W3akypwZEdc_-pnDwWB3kKoDgUN'), quality:'alta'},  // e6 high
-                {path: driveUrl('1AhLyXnRJscFO1Z8r8aIWwR7hIjGPJiEl'), quality:'baja'},  // e6 low
-                {path: driveUrl('1L_-wImowc8RaULkqzrKi_w2_W-xoDcnE'), quality:'alta'},  // e7 high
-                {path: driveUrl('15JVODxalPDXAE0etBzXC2NWB5M7u9v4X'), quality:'baja'},  // e7 low
-                {path: driveUrl('1bJ7fBa1om4SRQhcTrTPP4lCnCvkdVymD'), quality:'alta'},  // e8 high
-                {path: driveUrl('1TW43kOUT-qq8AdWbLqtvVGGWSN3f74b2'), quality:'baja'},  // e8 low
-                {path: driveUrl('1qvtNuCF_E11xiGTBnFxCrss8l5B9B4-4'), quality:'alta'},  // e9 high
-                {path: driveUrl('1Zh5y3i6B_qikACUm3wYqLMmBRr6d3bSQ'), quality:'baja'},  // e9 low
-                {path: driveUrl('1tG6NSvT2WLCp_rjwhvXMUceEDZP_rmHA'), quality:'alta'},  // e10 high
-                {path: driveUrl('1CGSd6za-XHGrrip6V60WXOass8jv1fCy'), quality:'baja'},  // e10 low
-                {path: driveUrl('1Ia-c4icg1KkLeUqmo1rg3xMLNmOSMvHP'), quality:'alta'},  // e11 high
-                {path: driveUrl('11R0DsnR87XuzUghGar_eDSYymntBwgik'), quality:'baja'},  // e11 low
-                {path: driveUrl('1M6uUylqkH000U2Rdo4UWiczwJa7rgZWy'), quality:'alta'},  // e12 high
-                {path: driveUrl('1YCSHJf6i9VtkPh3w9I-AF2nhoro_DkOU'), quality:'baja'}   // e12 low
+
+            // Videos REALES (grabaciones reales) - r1 a r65
+            reales: [
+                driveUrl('1QwMXFa3BUV_PSZ5W9VAJ4Z2SEy7F_mI2'),  // r1
+                driveUrl('1QXAW8hBGhxBvoG_cWR2t05QUaaIn91Jo'),  // r2
+                driveUrl('1oacD31ujcV7W0tEAVRtng6FTYyvgmGa0'),  // r3
+                driveUrl('1NoX-A6mw26OBg1yoen0tVWGQk9a-zas8'),  // r4
+                driveUrl('15FT8WuDG81Fo13A4ELv2K6-Ak77JiBt8'),  // r5
+                driveUrl('1xHzjpw2kU6gePC3ZEuKzh5xtqu8VsAS0'),  // r6
+                driveUrl('1dScPoJwvwCs4NDok8I1jaNHXXc53dktQ'),  // r7
+                driveUrl('1pDe-c77ainx4-Qd6hyaIO1Rya0fJe4T6'),  // r8
+                driveUrl('1AjLFYUNQt-DEYUD2FoqCAKTwCWiaDZFd'),  // r9
+                driveUrl('1MxoSl3z9RdiL9hBGYwDohKEu50voaSqG'),  // r10
+                driveUrl('10gP8DTecRTKwC4WBbfIzQX9HqwbRg9NO'),  // r11
+                driveUrl('1-VHp-iQwGGdIQbPCzUxBaixAogIQsai3'),  // r12
+                driveUrl('1MAZSNtXou7cJHqmkm33Z7XrUM5AF4HF2'),  // r13
+                driveUrl('1BxxNKkaCDkPY0pvsNd94NEKMeVC24yxW'),  // r14
+                driveUrl('140Ef7lsG2AvV39slNzHFQspnY1Z72c6G'),  // r15
+                driveUrl('1zCTD9Rr3PCyu91aEF5sLyrPXZMnw5dQ-'),  // r16
+                driveUrl('1OgIm31JmwWKpyc40Qo093EkjrO5mfRfm'),  // r17
+                driveUrl('1fZ7dNsFXSa4mhEv1TMMXda20YbQ7S1JX'),  // r18
+                driveUrl('1OKpv79yoRvMApnPU82DVjYQpcfU-MCjg'),  // r19
+                driveUrl('1hRA8unzqupEG2axPTe9IktBxHsN7_SO-'),  // r20
+                driveUrl('1AmdjEhNgVYI4keu2_mBm8mMCL5cUzsoA'),  // r21
+                driveUrl('1zI8_mPXixO9w8nqi0HKjdB_TWllAa3kM'),  // r22
+                driveUrl('1xrPOfmJODiOVN-3Ebe0ruY2ZIOWVHq9P'),  // r23
+                driveUrl('13zu-KRkcJcJi0Oxz2IGxQMu_LnplDgRN'),  // r24
+                driveUrl('1fkB1RsB_9GDZzh-scYLS6UnIbtMaJj6y'),  // r25
+                driveUrl('1VHCB-W-hjUNvYgtdfSmljdHqTHEp-uj3'),  // r26
+                driveUrl('1p6Nh8EIDcSRHeDm4E9pzVYKsjks46Xn6'),  // r27
+                driveUrl('1rvA9-oqjf2Gx9t2nctrhPz9LxlUJ9DEo'),  // r28
+                driveUrl('1vZG1gbHsC1DB5YR8t9CFljqu1Yre0_m-'),  // r29
+                driveUrl('142awY3gwm9ndLl9s9YRG-fPT85Oj7kPF'),  // r30
+                driveUrl('1xA4_whZETaOvX9iQDHT0OhsXGb09yEiS'),  // r31
+                driveUrl('1idJ3Rx1cGhUqy8SG-IRLCAKwZ4k8vHVS'),  // r32
+                driveUrl('1CMewCdURvji7DUY1mZBH9aCNpB01koxy'),  // r33
+                driveUrl('1T8D7vtC9N7SGfoyzMRysmg8uKsC8En6U'),  // r34
+                driveUrl('1LKZL8ETqPgZ7FhEk5sj-pr6xrYqqqpgi'),  // r35
+                driveUrl('1w-tOe3ATBRWkUKUiOPVmlbnc8RH-RXrZ'),  // r36
+                driveUrl('1IFi2rfytDeVzxmSki0SOX-Vx6UjUYMAj'),  // r37
+                driveUrl('1C36LEnvgKGY6ZSpVLQ9Q7t2DVv98s1uI'),  // r38
+                driveUrl('10RDESg3Rt702W4axWT6LAH00pp9vBTmx'),  // r39
+                driveUrl('1VE2Dfj5WuYVGmS7Y-9NHAcgP8VHhChY0'),  // r40
+                driveUrl('1ahbJToPIHODukffeDLFiAOWhCkGxx9lh'),  // r41
+                driveUrl('1fzvfPANxY9hBTUNgjh57-I0hE2hU6Dnk'),  // r42
+                driveUrl('1OAwICoL_o6a9uiaKaH3qI0_HVmds9wzK'),  // r43
+                driveUrl('1UOPo-QqDY2M0doiZjXUsYgpec2kAiPSm'),  // r44
+                driveUrl('161WuvRGjonpYnQWstYw_4g0DwIs3DDEM'),  // r45
+                driveUrl('1DR_5tboaSkfdPurdZCJwbFMCwp25ZJ6h'),  // r46
+                driveUrl('1C-1p3y7lBsZwAzI9jYYAiZDjo82pl-tM'),  // r47
+                driveUrl('18cGic3llUmArk-m3G0Ln7d8NXu0dLFLd'),  // r48
+                driveUrl('16ji_2kdqFoi_s0VLEECQiOxnXUt_45KR'),  // r49
+                driveUrl('1f6Bc73Smn2bNItgo3ChZ3ixoiiv10aMl'),  // r50
+                driveUrl('1qdGfcduVAHvvMiPWb9oIi5amlnnSnMha'),  // r51
+                driveUrl('1Su1qcg6weYnvGW52fbpQEIGam0mdD_UV'),  // r52
+                driveUrl('13863pWgJjTixy51bGHv4rj81yArDoc2I'),  // r53
+                driveUrl('1ePRezD6Nwsn6fibySzMCppbmcSqQbL_k'),  // r54
+                driveUrl('1qOvzeGvuILhOLbQHDlMYrGoYHo3VhwFW'),  // r55
+                driveUrl('1ml3lhfT4GmKNrKwA-kxRFd9jDHQw08SQ'),  // r56
+                driveUrl('1gUh5WsT07tXom1iGisYfb-HJ36l3bN3x'),  // r57
+                driveUrl('14yky8wE57ehye24YkO6NkqzSfztOJKXo'),  // r58
+                driveUrl('1mWfaLSZSFVt8YzCCo2WXL_SWNp0mj6y1'),  // r59
+                driveUrl('1TZkeGW-Q1xutlT7IeegJnDFrz_ZyorFl'),  // r60
+                driveUrl('1QtIoUeCC9od_jPW3m0YQqFh_6R2K_scG'),  // r61
+                driveUrl('1IVHLrtBpaNHjhZtEHpdHmN_nlgzfVk7A'),  // r62
+                driveUrl('1tSYNcrFupNbl9tYdE6sZMZeyMzBazfHa'),  // r63
+                driveUrl('1xMp-G9saSKBWktYM8rAnSuWsvn2qpSrx'),  // r64
+                driveUrl('1ZqjDfMp0a3X9_yqQluDt1q7YxEHiJUqu')   // r65
             ],
-            // Pool IA INFORMATIVOS (20 videos - se seleccionan 4)
-            ia_inf: [
-                {path: driveUrl('14wYN6VH_oc2z5OHj4yvw_wIZfcyo6R2l'), quality:'alta'},  // i2 high
-                {path: driveUrl('1QAgqx3oNhBb_9rqhCJvPMDIiF8zpxu08'), quality:'baja'},  // i2 low
-                {path: driveUrl('1dNxvstW5eWOZ0Dqc0igUKPQ64ByFV-8Q'), quality:'alta'},  // i3 high
-                {path: driveUrl('1mPC6LtYQWYZpDD7OecqXXLD0Y5hBaGYV'), quality:'baja'},  // i3 low
-                {path: driveUrl('1Pr1usuKFAo2Pc27j5zc8PiM5bmrzcdR-'), quality:'alta'},  // i4 high
-                {path: driveUrl('1--Pwvz3u5cQ-lXosTt785hWIMBd9PZSc'), quality:'baja'},  // i4 low
-                {path: driveUrl('1FOLHKBd5BnHBPCw060t6ikmpJY_8o_qY'), quality:'alta'},  // i5 high
-                {path: driveUrl('1mdp2BraNWSiETFJ6l_9EoPP175TAwkvh'), quality:'baja'},  // i5 low
-                {path: driveUrl('1COrk6-S17AqR1B6S5yZ1_LvJU_FExc9v'), quality:'alta'},  // i6 high
-                {path: driveUrl('1xzgNwsPbcA0mg8fV9ModYhBwdFOOeNKk'), quality:'baja'},  // i6 low
-                {path: driveUrl('1Fzq2qkRJSE6s1rY3p12JieOHWDAaut9g'), quality:'alta'},  // i7 high
-                {path: driveUrl('1WdIu5RD5VsTAw60w1Iuu3WVcW-NHlBf4'), quality:'baja'},  // i7 low
-                {path: driveUrl('1amfEE1YPUSXSB56Zc1atdmC8WW4qrKnM'), quality:'alta'},  // i8 high
-                {path: driveUrl('1MT4Y5rih9Fd65XxJxAbAZmVL2YkfbmVI'), quality:'baja'},  // i8 low
-                {path: driveUrl('1EjkRDlVzElJGXerAv2yDOiZ96YtJv29O'), quality:'alta'},  // i9 high
-                {path: driveUrl('1g0gbjLLCm2-_7U5OORaTY8A4m4Rkg4cX'), quality:'baja'},  // i9 low
-                {path: driveUrl('1U2p9uvRByUvdiLRUNKWhwT5xTjtCHBj_'), quality:'alta'},  // i10 high
-                {path: driveUrl('1Y3x36LyRzhVYalWo_lqzgbrDhmnGuiZe'), quality:'baja'},  // i10 low
-                {path: driveUrl('1BtrQNR0Vq3y3PeL3k8akYnj2SQOwKKvV'), quality:'alta'},  // i11 high
-                {path: driveUrl('1CPxmEyRSQs0MiaERtVqKgZQTvoW7eTOm'), quality:'baja'}   // i11 low
-            ],
-            // REALES ENTRETENIMIENTO (12 videos - se seleccionan 4)
-            real_ent: [
-                driveUrl('1-LxXusptKl3zS41mLX9fRHr0uJvwma5m'),  // e1
-                driveUrl('1U51cb2pH_uXFJMvZBnihzL7cda9Ox6wI'),  // e2
-                driveUrl('1oQPdDsc2KmyCC3RFvuvTFgR21Ak4NA1w'),  // e3
-                driveUrl('17Juzab9snEd7gFLY5iUDPJCvk87nCZzU'),  // e4
-                driveUrl('1zHwxaPQ_ShklUSCjlkLTAGrX_1Ihyc_p'),  // e5
-                driveUrl('1oQRgR_nNXy8BPpJzFRrD54yDqNGfAACa'),  // e6
-                driveUrl('1QbOaTtneQLAjImsmXxTBuJvh63e_6L5Z'),  // e7
-                driveUrl('172RdQMYKBFNqiJ3wpyc4KHpZ47qEB-_x'),  // e8
-                driveUrl('1yHaqbFHnaigdtdRUwUcoQUbl-gp8O-UQ'),  // e9
-                driveUrl('1dJVGhVUZsCkV5oujZ-YJo87x9eMjzSaf'),  // e10
-                driveUrl('1vAKWq56B0zQS3XxRHpoqty4lccoHWu-S'),  // e11
-                driveUrl('1oYnyPfvlRXwIhj74qbvANrx5A-5ueIom')   // e12
-            ],
-            // REALES INFORMATIVOS (12 videos - se seleccionan 4)
-            real_inf: [
-                driveUrl('12lCjfpHe4kVj38afME1wZPEGfiY4WNgH'),  // i1
-                driveUrl('15VxDhh296yCqHJvagDBv1vaIzHM7YEv0'),  // i2
-                driveUrl('1PQSEe6mhru1Os5yN_it3gglwBk0NW7LS'),  // i3
-                driveUrl('1n9dKUp9v7YR8p7eIb4c1IDKTilVIKZQ-'),  // i4
-                driveUrl('1XC0beLyDPb9cNmR_bZUD512rIcUxjhZh'),  // i5
-                driveUrl('1u7vToxUvkiZjiszrPf5C1q-0AdKfxO_z'),  // i6
-                driveUrl('1QhQ90mXqhNNgoiSVzF8daQKJudUmqdht'),  // i7
-                driveUrl('1DWB25JVhcE3DxqjpR6nKf780-GA_X7pA'),  // i8
-                driveUrl('1DZi6Tg3GKEVVJkB2LU_vXoF3LusKN_wY'),  // i9
-                driveUrl('1dZakCH6mjPd4MNR_rS1PLSmmdEUCtUX-'),  // i10
-                driveUrl('1EHmp7dqHSxmrQH7P9VzNG6zulbp7sV78'),  // i11
-                driveUrl('1X6vEHHDsZDhO5IfjPthHZCtbrgex6fqC')   // i12
+
+            // Videos PLACEBO (control de atención) - p1 a p10
+            placebo: [
+                driveUrl('11eGJZYqVpXBMTiOECjd8UBOC4l3rx9HR'),  // p1
+                driveUrl('1PYAUC22kpqqL8b1ecG_Qrg6Bb36GLxx5'),  // p2
+                driveUrl('1EwfqdhdJ27gOmSaJUJVGvx7zneUOqlLm'),  // p3
+                driveUrl('1lhSbel64fWuzkqo8jnT5m17rikuH0guL'),  // p4
+                driveUrl('1Emj3p8cIs8SPXGNT5UDlbgozGeycFKn_'),  // p5
+                driveUrl('1O7szddVCZpppur0W0Ufh_EKj_8D7VfjJ'),  // p6
+                driveUrl('1INSZbM4HygRHqBxpJXJ7Tv_GzEjvpu4c'),  // p7
+                driveUrl('1LGhpQWXNMu5kEr28VcIZwu3FKYCNDy0N'),  // p8
+                driveUrl('1CxGXReLCUYz9lyu7KZFBhGZN0kV1AXwh'),  // p9
+                driveUrl('1jhOXDX2sS5xpNpn5IyZR4w5Wt8jixsZU')   // p10
             ]
         };
 
@@ -793,17 +859,43 @@
 
         function selectVideosForExperiment() {
             let selected = [];
-            // 4 evidentes (todos - control de atención, ya tienen tipo asignado)
-            selected.push(...VIDEOS_POOL.evidentes.map(v => ({...v, es_fake:true, es_evidente:true})));
-            // 4 IA entretenimiento (selección aleatoria del pool)
-            selected.push(...shuffleArray(VIDEOS_POOL.ia_ent).slice(0,4).map(v => ({...v, tipo:'entretenimiento', es_fake:true, es_evidente:false})));
-            // 4 IA informativos (selección aleatoria del pool)
-            selected.push(...shuffleArray(VIDEOS_POOL.ia_inf).slice(0,4).map(v => ({...v, tipo:'informativo', es_fake:true, es_evidente:false})));
-            // 4 reales entretenimiento
-            selected.push(...shuffleArray(VIDEOS_POOL.real_ent).slice(0,4).map(path => ({path, tipo:'entretenimiento', es_fake:false, es_evidente:false, quality:'real'})));
-            // 4 reales informativos
-            selected.push(...shuffleArray(VIDEOS_POOL.real_inf).slice(0,4).map(path => ({path, tipo:'informativo', es_fake:false, es_evidente:false, quality:'real'})));
-            // Total: 20 videos (4+4+4+4+4)
+
+            // NUEVA LÓGICA DE SELECCIÓN:
+            // Total: 20 videos
+            // - Al menos 2 placebos (control de atención)
+            // - 9 fakes (videos generados por IA)
+            // - 9 reales (videos reales)
+
+            // 1. Seleccionar 2 placebos aleatorios (o todos si hay menos de 2)
+            const numPlacebos = Math.max(2, Math.min(VIDEOS_POOL.placebo.length, 2));
+            const selectedPlacebos = shuffleArray(VIDEOS_POOL.placebo).slice(0, numPlacebos);
+            selected.push(...selectedPlacebos.map(path => ({
+                path,
+                tipo: 'placebo',
+                es_fake: false, // Los placebos son videos evidentemente fake o real (para control)
+                es_placebo: true
+            })));
+
+            // 2. Seleccionar 9 fakes aleatorios
+            const selectedFakes = shuffleArray(VIDEOS_POOL.fakes).slice(0, 9);
+            selected.push(...selectedFakes.map(path => ({
+                path,
+                tipo: 'fake',
+                es_fake: true,
+                es_placebo: false
+            })));
+
+            // 3. Seleccionar 9 reales aleatorios
+            const selectedReales = shuffleArray(VIDEOS_POOL.reales).slice(0, 9);
+            selected.push(...selectedReales.map(path => ({
+                path,
+                tipo: 'real',
+                es_fake: false,
+                es_placebo: false
+            })));
+
+            // Total: 2 + 9 + 9 = 20 videos
+            // Mezclar el orden final
             return shuffleArray(selected);
         }
 
