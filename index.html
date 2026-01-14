@@ -349,18 +349,21 @@
                     <h4>Objetivo del Estudio:</h4>
                     <p>Este experimento busca entender cómo las personas perciben y distinguen entre videos reales y videos generados por inteligencia artificial.</p>
 
+                    <h4>Temática de los Videos:</h4>
+                    <p>Los videos que verás muestran <strong>situaciones turísticas</strong>: paisajes, monumentos, personas en entornos vacacionales, escenas de viajes, etc. Verás tanto contenido de entretenimiento como informativo relacionado con destinos y experiencias turísticas.</p>
+
                     <h4>¿Qué tendrás que hacer?</h4>
                     <ul>
                         <li><strong>Verás 20 videos</strong> cortos (cada uno dura entre 5-10 segundos)</li>
-                        <li>Para cada video, deberás <strong>evaluar si crees que es real o generado por IA</strong></li>
-                        <li>Usarás un <strong>slider</strong> (deslizador) con valores del <strong>1 al 10</strong>:
+                        <li>Para cada video, deberás <strong>indicar si crees que es REAL o FAKE (generado por IA)</strong></li>
+                        <li>Si consideras que el video es <strong>FAKE</strong>, te pediremos que valores 3 aspectos usando sliders del 0 al 10:
                             <ul>
-                                <li><strong>1 = Totalmente convencido de que es REAL</strong></li>
-                                <li><strong>5 = Neutral / No estoy seguro</strong></li>
-                                <li><strong>10 = Totalmente convencido de que es FAKE (generado por IA)</strong></li>
+                                <li><strong>Coherencia de elementos visuales en primer plano</strong></li>
+                                <li><strong>Naturalidad del movimiento</strong></li>
+                                <li><strong>Coherencia de iluminación y sombras</strong></li>
                             </ul>
+                            <small>(0 = Muy mal / Muy artificial | 10 = Perfecto / Muy natural)</small>
                         </li>
-                        <li>Si tu valoración es <strong>diferente de 1</strong>, te pediremos que indiques <strong>por qué consideras que puede ser generado por IA</strong></li>
                         <li>No hay respuestas correctas o incorrectas, queremos tu <strong>percepción honesta</strong></li>
                     </ul>
 
@@ -417,58 +420,59 @@
                 <iframe id="video-player" src="" allow="autoplay"></iframe>
             </div>
 
+            <!-- Pregunta principal: Real o Fake -->
             <div class="slider-container">
                 <h3>¿Este video es real o generado por IA?</h3>
-
-                <div class="slider-labels">
-                    <span class="label-real">😊 REAL (Seguro)</span>
-                    <span class="label-fake">🤖 FAKE/IA (Seguro)</span>
+                <div style="display: flex; justify-content: center; gap: 2rem; margin: 1rem 0;">
+                    <label style="display: flex; align-items: center; padding: 1rem 2rem; background: #f8f9fa; border-radius: 8px; cursor: pointer; border: 3px solid transparent; transition: all 0.2s;" id="label-real">
+                        <input type="radio" name="respuesta-tipo" value="real" style="margin-right: 0.75rem; width: 22px; height: 22px; cursor: pointer;" onchange="onTipoChange('real')">
+                        <span style="font-size: 1.1rem; font-weight: 600; color: var(--success-color);">REAL</span>
+                    </label>
+                    <label style="display: flex; align-items: center; padding: 1rem 2rem; background: #f8f9fa; border-radius: 8px; cursor: pointer; border: 3px solid transparent; transition: all 0.2s;" id="label-fake">
+                        <input type="radio" name="respuesta-tipo" value="fake" style="margin-right: 0.75rem; width: 22px; height: 22px; cursor: pointer;" onchange="onTipoChange('fake')">
+                        <span style="font-size: 1.1rem; font-weight: 600; color: var(--danger-color);">FAKE (IA)</span>
+                    </label>
                 </div>
-
-                <div class="slider-track">
-                    <input type="range" id="slider" class="slider-input" min="1" max="10" value="5" oninput="updateSliderValue(this.value)">
-                </div>
-
-                <div class="slider-value-display" id="slider-value">5</div>
-
-                <div class="slider-markers">
-                    <span class="marker">1</span>
-                    <span class="marker">2</span>
-                    <span class="marker">3</span>
-                    <span class="marker">4</span>
-                    <span class="marker">5</span>
-                    <span class="marker">6</span>
-                    <span class="marker">7</span>
-                    <span class="marker">8</span>
-                    <span class="marker">9</span>
-                    <span class="marker">10</span>
-                </div>
-
-                <p style="text-align: center; color: var(--text-light); margin-top: 1rem;">
-                    <small>1 = Completamente real | 5 = No estoy seguro | 10 = Completamente fake/IA</small>
-                </p>
             </div>
 
-            <!-- Causas con botones radio (oculto solo si slider = 1) -->
-            <div id="causas-container" class="slider-container" style="display: block;">
-                <h3 style="margin-bottom: 0.5rem;">¿Por qué consideras que puede ser generado por IA?</h3>
-                <div style="display: grid; gap: 0.5rem;">
-                    <label style="display: flex; align-items: center; padding: 0.5rem; background: #f8f9fa; border-radius: 4px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s;">
-                        <input type="radio" name="causa-fake" value="movimientos_gestos" style="margin-right: 0.5rem; width: 18px; height: 18px; cursor: pointer;">
-                        <span style="font-size: 0.9rem;">Movimientos y gestos anormales</span>
-                    </label>
-                    <label style="display: flex; align-items: center; padding: 0.5rem; background: #f8f9fa; border-radius: 4px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s;">
-                        <input type="radio" name="causa-fake" value="piel_textura" style="margin-right: 0.5rem; width: 18px; height: 18px; cursor: pointer;">
-                        <span style="font-size: 0.9rem;">Problemas de piel y textura</span>
-                    </label>
-                    <label style="display: flex; align-items: center; padding: 0.5rem; background: #f8f9fa; border-radius: 4px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s;">
-                        <input type="radio" name="causa-fake" value="iluminacion_colores" style="margin-right: 0.5rem; width: 18px; height: 18px; cursor: pointer;">
-                        <span style="font-size: 0.9rem;">Iluminación y colores inconsistentes</span>
-                    </label>
-                    <label style="display: flex; align-items: center; padding: 0.5rem; background: #f8f9fa; border-radius: 4px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s;">
-                        <input type="radio" name="causa-fake" value="otros_visuales" style="margin-right: 0.5rem; width: 18px; height: 18px; cursor: pointer;">
-                        <span style="font-size: 0.9rem;">Otros problemas visuales</span>
-                    </label>
+            <!-- Sliders condicionales (solo si elige FAKE) -->
+            <div id="sliders-fake-container" class="slider-container" style="display: none;">
+                <h3 style="margin-bottom: 1rem;">Valora los siguientes aspectos del video:</h3>
+                <p style="text-align: center; color: var(--text-light); margin-bottom: 1rem;">
+                    <small>0 = Muy mal / Muy artificial | 10 = Perfecto / Muy natural</small>
+                </p>
+
+                <!-- Slider 1: Coherencia elementos visuales -->
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 0.5rem;">Coherencia de los elementos visuales en primer plano</label>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <span style="font-size: 0.8rem; color: var(--danger-color);">0</span>
+                        <input type="range" id="slider-coherencia" class="slider-input" min="0" max="10" value="5" oninput="updateSliderDisplay('coherencia', this.value)" style="flex: 1;">
+                        <span style="font-size: 0.8rem; color: var(--success-color);">10</span>
+                        <span id="value-coherencia" style="font-weight: bold; min-width: 30px; text-align: center;">5</span>
+                    </div>
+                </div>
+
+                <!-- Slider 2: Naturalidad movimiento -->
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 0.5rem;">Naturalidad del movimiento observado en el video</label>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <span style="font-size: 0.8rem; color: var(--danger-color);">0</span>
+                        <input type="range" id="slider-movimiento" class="slider-input" min="0" max="10" value="5" oninput="updateSliderDisplay('movimiento', this.value)" style="flex: 1;">
+                        <span style="font-size: 0.8rem; color: var(--success-color);">10</span>
+                        <span id="value-movimiento" style="font-weight: bold; min-width: 30px; text-align: center;">5</span>
+                    </div>
+                </div>
+
+                <!-- Slider 3: Coherencia iluminacion -->
+                <div style="margin-bottom: 0.5rem;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 0.5rem;">Coherencia de la iluminacion y las sombras del video</label>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <span style="font-size: 0.8rem; color: var(--danger-color);">0</span>
+                        <input type="range" id="slider-iluminacion" class="slider-input" min="0" max="10" value="5" oninput="updateSliderDisplay('iluminacion', this.value)" style="flex: 1;">
+                        <span style="font-size: 0.8rem; color: var(--success-color);">10</span>
+                        <span id="value-iluminacion" style="font-weight: bold; min-width: 30px; text-align: center;">5</span>
+                    </div>
                 </div>
             </div>
 
@@ -479,14 +483,33 @@
         <div id="step-thanks" class="step">
             <div class="section thank-you-message" style="text-align: center;">
                 <div style="background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%); padding: 2rem; border-radius: 12px; color: white; margin: 1rem 0;">
-                    <h2 style="font-size: 2rem; margin-bottom: 1rem;">✓ ¡Experimento Completado!</h2>
+                    <h2 style="font-size: 2rem; margin-bottom: 1rem;">¡Experimento Completado!</h2>
                     <p style="font-size: 1.1rem; margin: 0;">
                         Tus respuestas han sido guardadas exitosamente
                     </p>
                 </div>
 
+                <!-- Resultados del participante -->
+                <div style="background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid #ff9800;">
+                    <h3 style="color: #e65100; text-align: center; margin-bottom: 1rem;">Tus Resultados</h3>
+                    <p style="font-size: 1.5rem; font-weight: bold; text-align: center; margin: 0.5rem 0;">
+                        Aciertos: <span id="resultado-aciertos" style="color: var(--success-color);">0</span> / <span id="resultado-total">20</span>
+                    </p>
+                    <p style="font-size: 1.2rem; text-align: center; color: #666;">
+                        (<span id="resultado-porcentaje">0</span>% de acierto)
+                    </p>
+                </div>
+
+                <!-- Videos fallados -->
+                <div id="videos-fallados-container" style="background: #fff; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border: 2px solid #e0e0e0; text-align: left; display: none;">
+                    <h3 style="color: var(--danger-color); text-align: center; margin-bottom: 1rem;">Videos en los que fallaste</h3>
+                    <div id="lista-videos-fallados" style="max-height: 300px; overflow-y: auto;">
+                        <!-- Se llena dinámicamente -->
+                    </div>
+                </div>
+
                 <div style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; text-align: left;">
-                    <h3 style="color: var(--primary-color); text-align: center; margin-bottom: 1rem;">📊 Sobre el Estudio</h3>
+                    <h3 style="color: var(--primary-color); text-align: center; margin-bottom: 1rem;">Sobre el Estudio</h3>
                     <p style="margin: 0.5rem 0;">Los videos incluían grabaciones reales y contenido generado por IA con diferentes niveles de calidad.</p>
                     <p style="margin: 0.5rem 0;"><strong>Objetivo:</strong> Investigar cómo las personas detectan contenido sintético y qué características visuales despiertan sospechas.</p>
                 </div>
@@ -500,7 +523,7 @@
                 </div>
 
                 <p style="margin-top: 2rem; font-size: 1.1rem; color: var(--success-color); font-weight: 600;">
-                    ¡Gracias por contribuir a esta investigación!
+                    ¡Gracias por contribuir a esta investigacion!
                 </p>
             </div>
         </div>
@@ -515,33 +538,33 @@
             responses: [],
             startTime: null,
             videoStartTime: null,
-            isSubmitting: false  // Flag para prevenir envíos múltiples
+            isSubmitting: false
         };
 
-        // Update slider value display
-        function updateSliderValue(value) {
-            document.getElementById('slider-value').textContent = value;
+        // Función para manejar cambio de tipo (Real/Fake)
+        function onTipoChange(tipo) {
+            const slidersFakeContainer = document.getElementById('sliders-fake-container');
+            const labelReal = document.getElementById('label-real');
+            const labelFake = document.getElementById('label-fake');
 
-            // Change color based on value
-            const display = document.getElementById('slider-value');
-            if (value <= 3) {
-                display.style.color = '#27ae60'; // Green for real
-            } else if (value <= 7) {
-                display.style.color = '#95a5a6'; // Gray for unsure
-            } else {
-                display.style.color = '#e74c3c'; // Red for fake
-            }
+            // Resetear estilos
+            labelReal.style.border = '3px solid transparent';
+            labelFake.style.border = '3px solid transparent';
 
-            // Show/hide causas dropdown: mostrar siempre excepto cuando slider=1
-            const causasContainer = document.getElementById('causas-container');
-            if (parseInt(value) === 1) {
-                causasContainer.style.display = 'none';
-                // Reset selection
-                const radios = document.querySelectorAll('input[name="causa-fake"]');
-                radios.forEach(radio => radio.checked = false);
+            if (tipo === 'fake') {
+                slidersFakeContainer.style.display = 'block';
+                labelFake.style.border = '3px solid var(--danger-color)';
+                labelFake.style.background = '#ffebee';
             } else {
-                causasContainer.style.display = 'block';
+                slidersFakeContainer.style.display = 'none';
+                labelReal.style.border = '3px solid var(--success-color)';
+                labelReal.style.background = '#e8f5e9';
             }
+        }
+
+        // Función para actualizar display de sliders
+        function updateSliderDisplay(tipo, value) {
+            document.getElementById('value-' + tipo).textContent = value;
         }
 
         // Start experiment
@@ -597,14 +620,28 @@
             const videoPlayer = document.getElementById('video-player');
             videoPlayer.src = video.path;
 
-            // Reset slider
-            document.getElementById('slider').value = 5;
-            updateSliderValue(5);
-
-            // Reset causa radio buttons (visible porque slider empieza en 5)
-            const radios = document.querySelectorAll('input[name="causa-fake"]');
+            // Reset radio buttons Real/Fake
+            const radios = document.querySelectorAll('input[name="respuesta-tipo"]');
             radios.forEach(radio => radio.checked = false);
-            document.getElementById('causas-container').style.display = 'block';
+
+            // Reset estilos de labels
+            const labelReal = document.getElementById('label-real');
+            const labelFake = document.getElementById('label-fake');
+            labelReal.style.border = '3px solid transparent';
+            labelReal.style.background = '#f8f9fa';
+            labelFake.style.border = '3px solid transparent';
+            labelFake.style.background = '#f8f9fa';
+
+            // Ocultar sliders condicionales
+            document.getElementById('sliders-fake-container').style.display = 'none';
+
+            // Reset sliders a valor 5
+            document.getElementById('slider-coherencia').value = 5;
+            document.getElementById('slider-movimiento').value = 5;
+            document.getElementById('slider-iluminacion').value = 5;
+            document.getElementById('value-coherencia').textContent = '5';
+            document.getElementById('value-movimiento').textContent = '5';
+            document.getElementById('value-iluminacion').textContent = '5';
 
             // Update progress
             const progress = ((index + 1) / experimentState.videos.length) * 100;
@@ -615,30 +652,49 @@
 
         // Next video
         async function nextVideo() {
-            const sliderValue = parseInt(document.getElementById('slider').value);
-            const causaFakeRadio = document.querySelector('input[name="causa-fake"]:checked');
-            const causaFake = causaFakeRadio ? causaFakeRadio.value : '';
+            const respuestaTipoRadio = document.querySelector('input[name="respuesta-tipo"]:checked');
             const timeSpent = Math.round((Date.now() - experimentState.videoStartTime) / 1000);
 
-            // Validar que si slider > 1, debe seleccionar causa
-            if (sliderValue > 1 && !causaFake) {
-                alert('Por favor, selecciona la razón por la que consideras que el video puede ser generado por IA.');
+            // Validar que haya seleccionado Real o Fake
+            if (!respuestaTipoRadio) {
+                alert('Por favor, indica si el video es REAL o FAKE.');
                 return;
             }
 
+            const respuestaTipo = respuestaTipoRadio.value; // 'real' o 'fake'
             const currentVideo = experimentState.videos[experimentState.currentVideo];
-            const now = new Date();
+
+            // Obtener valores de sliders (solo relevantes si eligió fake)
+            let sliderCoherencia = null;
+            let sliderMovimiento = null;
+            let sliderIluminacion = null;
+
+            if (respuestaTipo === 'fake') {
+                sliderCoherencia = parseInt(document.getElementById('slider-coherencia').value);
+                sliderMovimiento = parseInt(document.getElementById('slider-movimiento').value);
+                sliderIluminacion = parseInt(document.getElementById('slider-iluminacion').value);
+            }
+
+            // Determinar si acertó
+            const esRealElVideo = !currentVideo.es_fake;
+            const usuarioDijoReal = respuestaTipo === 'real';
+            const acierto = esRealElVideo === usuarioDijoReal;
 
             // Save response with all fields
             const response = {
                 numero: experimentState.currentVideo + 1,
                 path: currentVideo.path,
-                tipo: currentVideo.tipo,  // 'fake', 'real', o 'placebo'
-                es_fake: currentVideo.es_fake,
-                es_placebo: currentVideo.es_placebo || false,
-                slider: sliderValue,
-                causa: sliderValue > 1 ? causaFake : '',
-                tiempo: Math.round(timeSpent)
+                tipo_contenido: currentVideo.tipo,
+                es_fake_real: currentVideo.es_fake,
+                evidente: currentVideo.es_evidente || false,
+                calidad: currentVideo.quality || currentVideo.calidad || 'desconocida',
+                respuesta_usuario: respuestaTipo,
+                acierto: acierto,
+                slider_coherencia: sliderCoherencia,
+                slider_movimiento: sliderMovimiento,
+                slider_iluminacion: sliderIluminacion,
+                tiempo: Math.round(timeSpent),
+                es_placebo: currentVideo.es_evidente || false
             };
 
             experimentState.responses.push(response);
@@ -657,6 +713,12 @@
 
             experimentState.isSubmitting = true;
 
+            // Calcular resultados
+            const totalVideos = experimentState.responses.length;
+            const aciertos = experimentState.responses.filter(r => r.acierto).length;
+            const porcentaje = Math.round((aciertos / totalVideos) * 100);
+            const videosFallados = experimentState.responses.filter(r => !r.acierto);
+
             const data = {
                 participante_id: experimentState.participanteId,
                 genero: experimentState.genero,
@@ -664,6 +726,9 @@
                 consumo_videos: experimentState.consumoVideos,
                 fecha_inicio: new Date(experimentState.startTime).toISOString(),
                 fecha_finalizacion: new Date().toISOString(),
+                total_aciertos: aciertos,
+                total_videos: totalVideos,
+                porcentaje_acierto: porcentaje,
                 respuestas: experimentState.responses
             };
 
@@ -675,18 +740,55 @@
                     body: JSON.stringify(data)
                 });
 
+                // Mostrar resultados
+                mostrarResultados(aciertos, totalVideos, porcentaje, videosFallados);
+
                 document.getElementById('step-videos').classList.remove('active');
                 document.getElementById('step-thanks').classList.add('active');
 
             } catch (error) {
                 console.error('Error:', error);
+                mostrarResultados(aciertos, totalVideos, porcentaje, videosFallados);
                 document.getElementById('step-videos').classList.remove('active');
                 document.getElementById('step-thanks').classList.add('active');
             }
         }
-    
+
+        // Mostrar resultados en pantalla final
+        function mostrarResultados(aciertos, total, porcentaje, videosFallados) {
+            document.getElementById('resultado-aciertos').textContent = aciertos;
+            document.getElementById('resultado-total').textContent = total;
+            document.getElementById('resultado-porcentaje').textContent = porcentaje;
+
+            // Si hay videos fallados, mostrar la lista
+            if (videosFallados.length > 0) {
+                const container = document.getElementById('videos-fallados-container');
+                const lista = document.getElementById('lista-videos-fallados');
+                container.style.display = 'block';
+
+                let html = '';
+                videosFallados.forEach((video, index) => {
+                    const realOFake = video.es_fake_real ? 'FAKE (IA)' : 'REAL';
+                    const colorRespuesta = video.es_fake_real ? 'var(--danger-color)' : 'var(--success-color)';
+                    const tuRespuesta = video.respuesta_usuario === 'real' ? 'REAL' : 'FAKE';
+
+                    html += `
+                        <div style="padding: 0.75rem; margin-bottom: 0.5rem; background: #f8f9fa; border-radius: 6px; border-left: 4px solid ${colorRespuesta};">
+                            <p style="margin: 0; font-weight: 600;">Video ${video.numero}</p>
+                            <p style="margin: 0.25rem 0; font-size: 0.9rem;">
+                                Tu respuesta: <strong>${tuRespuesta}</strong> |
+                                Correcto: <strong style="color: ${colorRespuesta};">${realOFake}</strong>
+                            </p>
+                        </div>
+                    `;
+                });
+
+                lista.innerHTML = html;
+            }
+        }
+
         // CONFIGURACIÓN GOOGLE SHEETS
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwz7DSw-ZmUYCAhivepGPZYK5s05sIH-AelGUQaoHWi5_KOPQ5fOueeege4KGdLLIcLzA/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzwJskx0d2S5frpxSa7Tzap9We1UwdU8qvfXu2Ha-Nol6wCk9M_SIPL7aUQmlgoHn77/exec';
 
         // Configuración de videos
         // Helper function para crear URL de Google Drive con autoplay
