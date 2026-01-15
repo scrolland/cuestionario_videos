@@ -974,7 +974,7 @@
             selected.push(...selectedPlacebos.map(path => ({
                 path,
                 tipo: 'placebo',
-                es_fake: false, // Los placebos son videos evidentemente fake o real (para control)
+                es_fake: true, // Los placebos son videos evidentemente fake (para control de atención)
                 es_placebo: true
             })));
 
