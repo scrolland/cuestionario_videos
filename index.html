@@ -698,7 +698,14 @@
             };
 
             experimentState.responses.push(response);
-
+            
+             if (acierto) {
+                alert('ACERTASTE!');
+                return;
+            }else{
+                 alert('FALLASTE!');
+            }
+            
             // Load next video or finish
             loadVideo(experimentState.currentVideo + 1);
         }
