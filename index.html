@@ -680,6 +680,12 @@
             const usuarioDijoReal = respuestaTipo === 'real';
             const acierto = esRealElVideo === usuarioDijoReal;
 
+            if (acierto) {
+                alert('¡ACERTASTE!');
+            }else{
+                alert('¡FALLASTE!');
+            }
+
             // Save response with all fields
             const response = {
                 numero: experimentState.currentVideo + 1,
@@ -699,12 +705,6 @@
 
             experimentState.responses.push(response);
             
-             if (acierto) {
-                alert('ACERTASTE!');
-                return;
-            }else{
-                 alert('FALLASTE!');
-            }
             
             // Load next video or finish
             loadVideo(experimentState.currentVideo + 1);
