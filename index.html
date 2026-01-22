@@ -131,9 +131,9 @@
             height: 10px;
             border-radius: 5px;
             background: linear-gradient(to right,
-                #27ae60 0%, #27ae60 20%,
+                #e74c3c 0%, #e74c3c 20%,
                 #95a5a6 50%,
-                #e74c3c 80%, #e74c3c 100%);
+                #27ae60 80%, #27ae60 100%);
             outline: none;
             -webkit-appearance: none;
             margin: 20px 0;
@@ -457,9 +457,9 @@
                 <div style="margin-bottom: 1.5rem;">
                     <label style="font-weight: 600; display: block; margin-bottom: 0.5rem;">Naturalidad del movimiento observado en el video</label>
                     <div style="display: flex; align-items: center; gap: 1rem;">
-                        <span style="font-size: 0.8rem; color: var(--success-color);">0</span>
+                        <span style="font-size: 0.8rem; color: var(--danger-color);">0</span>
                         <input type="range" id="slider-movimiento" class="slider-input" min="0" max="10" value="5" oninput="updateSliderDisplay('movimiento', this.value)" style="flex: 1;">
-                        <span style="font-size: 0.8rem; color: var(--danger-color);">10</span>
+                        <span style="font-size: 0.8rem; color: var(--success-color);">10</span>
                         <span id="value-movimiento" style="font-weight: bold; min-width: 30px; text-align: center;">5</span>
                     </div>
                 </div>
@@ -468,9 +468,9 @@
                 <div style="margin-bottom: 0.5rem;">
                     <label style="font-weight: 600; display: block; margin-bottom: 0.5rem;">Coherencia de la iluminacion y las sombras del video</label>
                     <div style="display: flex; align-items: center; gap: 1rem;">
-                        <span style="font-size: 0.8rem; color: var(--success-color);">0</span>
+                        <span style="font-size: 0.8rem; color: var(--danger-color);">0</span>
                         <input type="range" id="slider-iluminacion" class="slider-input" min="0" max="10" value="5" oninput="updateSliderDisplay('iluminacion', this.value)" style="flex: 1;">
-                        <span style="font-size: 0.8rem; color: var(--danger-color);">10</span>
+                        <span style="font-size: 0.8rem; color: var(--success-color);">10</span>
                         <span id="value-iluminacion" style="font-weight: bold; min-width: 30px; text-align: center;">5</span>
                     </div>
                 </div>
