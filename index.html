@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <title>Experimento: Detección de Videos Generados por IA</title>
     <style>
         /* Variables CSS */
@@ -681,12 +680,7 @@
             const usuarioDijoReal = respuestaTipo === 'real';
             const acierto = esRealElVideo === usuarioDijoReal;
 
-            if (acierto) {
-                swal('¡Acertaste!', '', 'success');
-            }else{
-                swal('¡Fallaste!', '', 'error');
-            }
-
+            
             // Save response with all fields
             const response = {
                 numero: experimentState.currentVideo + 1,
